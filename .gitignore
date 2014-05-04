@@ -1,2 +1,9 @@
-# Compiled
 *.elc
+\#*
+*~
+/.emacs.d/state
+/.emacs.d/bookmarks
+/.emacs.d/elpa
+/.emacs.d/snippets
+/.emacs.d/tramp
+/.emacs.d/url
