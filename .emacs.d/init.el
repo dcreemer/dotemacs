@@ -369,9 +369,10 @@
 ;;
 ;; load private configuration
 ;;
-(setq dc/private-emacs-dir "~/.emacs.private/")
-(when (file-exists-p dc/private-emacs-dir)
-  (load-file (concat dc/private-emacs-dir "init.el")))
+;; add the private local list directory to load path
+(let ((private-config-file (concat user-emacs-directory "private/private.el")))
+  (when (file-exists-p private-config-file)
+    (load-file private-config-file)))
 
 ;;
 ;; start emacs server
