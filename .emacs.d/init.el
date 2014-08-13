@@ -15,53 +15,12 @@
   (normal-top-level-add-subdirs-to-load-path))
 
 ;;
-;; packages to load and ensure
+;; packages to load and ensure are found in the .emacs.d/Cask file
 ;;
 
-(require 'package)
-(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
-(package-initialize)
-
-(when (not package-archive-contents)
-  (package-refresh-contents))
-
-(defvar dc/packages '(ac-nrepl
-                      auto-complete
-                      cider
-                      clojure-mode
-                      clojure-test-mode
-                      color-theme
-                      cyberpunk-theme
-                      deft
-                      erc-terminal-notifier
-                      exec-path-from-shell
-                      expand-region
-                      find-file-in-repository
-                      go-mode
-                      highlight-symbol
-                      htmlize
-                      httprepl
-                      ido-vertical-mode
-                      jedi
-                      magit
-                      markdown-mode
-                      multiple-cursors
-                      oauth
-                      python-mode
-                      rainbow-delimiters
-                      smart-mode-line
-                      smartparens
-                      smex
-                      tumblesocks
-                      twittering-mode
-                      w3m
-                      yaml-mode
-                      yasnippet))
-
-(dolist (p dc/packages)
-  (when (not (package-installed-p p))
-    (package-install p)))
+(require 'cask "/usr/local/Cellar/cask/0.7.0/cask.el")
+(cask-initialize)
+(require 'pallet)
 
 ;; fix the PATH variable on Mac OS X gui
 (when dc/macosx-gui-p
@@ -108,10 +67,14 @@
 (load-file (concat user-emacs-directory "util.el"))
 
 ;;
+;; simple auto-projects
+;;
+(projectile-global-mode)
+
+;;
 ;; Magit
 ;;
 (global-set-key "\C-xg" 'magit-status)
-(global-set-key "\C-xf" 'find-file-in-repository)
 
 ;;
 ;; UI Settings
@@ -224,17 +187,6 @@
 (setq mc/list-file (concat user-emacs-directory "state/mc-lists.el"))
 
 ;;
-;; deft
-;;
-(require 'deft)
-(setq deft-extension "txt"
-      deft-text-mode 'org-mode
-      deft-directory "~/Documents/Notes"
-      deft-use-filename-as-title nil)
-(global-set-key (kbd "<f4>") 'deft)
-(global-set-key (kbd "<f13>") 'deft)
-
-;;
 ;; Org
 ;;
 (setq org-startup-indented t
@@ -283,13 +235,13 @@
 ;;
 ;; clojure
 ;;
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
-(setq nrepl-hide-special-buffers t)
 (add-hook 'clojure-mode-hook 'subword-mode) ; allow for CamelCase
 (add-hook 'clojure-mode-hook 'auto-complete-mode)
+(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook 'ac-flyspell-workaround)
+(add-hook 'cider-mode-hook 'ac-cider-setup)
 (add-hook 'cider-repl-mode-hook 'subword-mode)
-(add-hook 'cider-repl-mode-hook 'ac-nrepl-setup)
-(add-hook 'cider-mode-hook 'ac-nrepl-setup)
+(add-hook 'cider-repl-mode-hook 'ac-cider-setup)
 (eval-after-load "auto-complete"
   '(add-to-list 'ac-modes 'cider-repl-mode))
 
@@ -330,7 +282,7 @@
 ;;
 ;; smart-mode-line
 ;;
-(setq sml/theme 'respectful)
+(setq sml/theme 'automatic)
 (setq sml/hidden-modes '(" SP" " hl-p" " hl-s"))
 (sml/setup)
 

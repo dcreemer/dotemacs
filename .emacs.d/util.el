@@ -62,3 +62,10 @@ by using nxml's indentation rules."
     (if (region-active-p)
         (buffer-substring (region-beginning) (region-end))
       (read-string "Query: ")))))
+
+;; 'clear' command for eshell
+;; from http://lists.gnu.org/archive/html/help-gnu-emacs/2007-08/msg00836.html
+(defun eshell/clear ()
+  (interactive)
+  (let ((inhibit-read-only t))
+    (erase-buffer)))
