@@ -6,11 +6,11 @@
   (and window-system (eq 'darwin system-type)))
 
 ;; customizations go in a separate file:
-(setq custom-file (concat user-emacs-directory "custom.el"))
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 (load custom-file 'noerror)
 
 ;; some packages are forked or copied locally. find those here:
-(let ((default-directory (concat user-emacs-directory "local-lisp/")))
+(let ((default-directory (expand-file-name "local-lisp/" user-emacs-directory)))
   (normal-top-level-add-to-load-path '("."))
   (normal-top-level-add-subdirs-to-load-path))
 
@@ -27,38 +27,33 @@
   (exec-path-from-shell-initialize))
 
 ;;
-;; Basic Global Keys
+;; load custom functions
 ;;
-(global-set-key "\M- " 'hippie-expand)
-(define-key global-map (kbd "RET") 'newline-and-indent)
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-(global-set-key (kbd "C-s") 'isearch-forward-regexp)
-(global-set-key (kbd "C-r") 'isearch-backward-regexp)
-(global-set-key (kbd "C-M-s") 'isearch-forward)
-(global-set-key (kbd "C-M-r") 'isearch-backward)
-(global-set-key '[(meta kp-delete)] 'kill-word)
+(load-file (expand-file-name "util.el" user-emacs-directory))
 
 ;;
 ;; save backups to common location, and keep more versions
 ;;
-(setq backup-directory-alist `(("." . ,(concat user-emacs-directory "state/backups"))))
+(setq backup-directory-alist `(("." . ,(state-file "backups"))))
 (setq delete-old-versions t
       kept-new-versions 3
       kept-old-versions 2
       version-control t)
 
-(setq auto-save-list-file-prefix (concat user-emacs-directory "state/auto-save-list/.saves-"))
+(setq auto-save-list-file-prefix (state-file "auto-save-list/.saves-"))
 
 ;;
 ;; save and restore sessions
 ;;
-(setq savehist-file (concat user-emacs-directory "state/history"))
+(setq savehist-file (state-file "history"))
 (setq savehist-additional-variables '(kill-ring))
 (savehist-mode 1)
 
 (elscreen-start)
+(setq elscreen-tab-display-control nil
+      elscreen-display-screen-number nil)
 
-(setq desktop-path (list (concat user-emacs-directory "state"))
+(setq desktop-path (list user-state-directory)
       desktop-base-file-name "emacs.desktop"
       desktop-restore-frames t)
 (desktop-save-mode 1)
@@ -67,13 +62,10 @@
 (add-hook 'desktop-after-read-hook 'elscreen-load-hook)
 
 ;;
-;; load custom functions
-;;
-(load-file (concat user-emacs-directory "util.el"))
-
-;;
 ;; simple auto-projects
 ;;
+(setq projectile-cache-file (state-file "projectile.cache")
+      projectile-known-projects-file (state-file "projectile-bookmarks.eld"))
 (projectile-global-mode)
 
 ;;
@@ -85,10 +77,20 @@
 ;; UI Settings
 ;;
 
+;; Basic global keys
+(global-set-key "\M- " 'hippie-expand)
+(define-key global-map (kbd "RET") 'newline-and-indent)
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(global-set-key (kbd "C-s") 'isearch-forward-regexp)
+(global-set-key (kbd "C-r") 'isearch-backward-regexp)
+(global-set-key (kbd "C-M-s") 'isearch-forward)
+(global-set-key (kbd "C-M-r") 'isearch-backward)
+(global-set-key '[(meta kp-delete)] 'kill-word)
+
 ;; better directory traversal
 (ido-mode t)
 (setq ido-enable-flex-matching t)
-(setq ido-save-directory-list-file (concat user-emacs-directory "state/ido.last"))
+(setq ido-save-directory-list-file (state-file "ido.last"))
 (ido-vertical-mode 1)
 (setq ido-use-virtual-buffers t)
 
@@ -96,7 +98,7 @@
 ;; smarter meta-x
 (require 'smex)
 (smex-initialize)
-(setq smex-save-file (concat user-emacs-directory "state/smex-items"))
+(setq smex-save-file (state-file "smex-items"))
 (global-set-key (kbd "M-x") 'smex)
 (global-set-key (kbd "M-X") 'smex-major-mode-commands)
 (global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
@@ -104,13 +106,13 @@
 ;; return to same point in a buffer when revisiting the file:
 (require 'saveplace)
 (setq-default save-place t)
-(setq save-place-file (concat user-emacs-directory "state/places"))
+(setq save-place-file (state-file "places"))
 
 ;; remember many recent files:
 (require 'recentf)
 (setq recentf-max-saved-items 200
       recentf-max-menu-items 15
-      recentf-save-file (concat user-emacs-directory "state/recentf"))
+      recentf-save-file (state-file "recentf"))
 (recentf-mode +1)
 (global-set-key (kbd "C-c f") 'recentf-ido-find-file)
 
@@ -161,8 +163,8 @@
 ;; shell -- currently favoring eshell
 ;;(global-set-key (kbd "C-$") '(lambda () (interactive) (ansi-term "bash")))
 (global-set-key (kbd "C-$") 'eshell)
-(setq eshell-directory-name (concat user-emacs-directory "state/eshell"))
-(setq eshell-aliases-file (concat user-emacs-directory "eshell-aliases"))
+(setq eshell-directory-name (state-file "eshell"))
+(setq eshell-aliases-file (expand-file-name "eshell-aliases" user-emacs-directory))
 
 ;;
 ;; spelling
@@ -189,7 +191,7 @@
 (global-set-key (kbd "C->") 'mc/mark-next-like-this)
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-(setq mc/list-file (concat user-emacs-directory "state/mc-lists.el"))
+(setq mc/list-file (state-file "mc-lists.el"))
 
 ;;
 ;; Org
@@ -222,7 +224,7 @@
 ;; auto-completion everywhere
 (require 'auto-complete-config)
 (ac-config-default)
-(setq ac-comphist-file (concat user-emacs-directory "state/ac-comphist.dat"))
+(setq ac-comphist-file (state-file "ac-comphist.dat"))
 (global-auto-complete-mode t)
 
 ;; highlight-synbols in all programming modes
@@ -327,7 +329,7 @@
 ;; load private configuration
 ;;
 ;; add the private local list directory to load path
-(let ((private-config-file (concat user-emacs-directory "private/private.el")))
+(let ((private-config-file (expand-file-name "private/private.el" user-emacs-directory)))
   (when (file-exists-p private-config-file)
     (load-file private-config-file)))
 

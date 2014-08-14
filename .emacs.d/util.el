@@ -70,11 +70,19 @@ by using nxml's indentation rules."
   (let ((inhibit-read-only t))
     (erase-buffer)))
 
+;; I keep my transient state in a custom directory
+(defvar user-state-directory
+  (expand-file-name "state" user-emacs-directory)
+  "default directory for transient user state")
+
+(defun state-file (path)
+  (expand-file-name path user-state-directory))
+
 ;;
 ;; load and save elscreen configuration
 ;;
 (defvar elscreen-tab-configuration-store-filename
-    (concat user-emacs-directory "/state/elscreen"))
+    (concat user-emacs-directory "state/elscreen"))
 
 (defun elscreen-store-hook ()
   "Store the elscreen tab configuration."
@@ -96,4 +104,5 @@ by using nxml's indentation rules."
       (while (cdr buffers)
         (switch-to-buffer-other-window (car (cdr buffers)))
         (setq buffers (cdr buffers)))
-      (setq screens (cdr screens)))))
+      (setq screens (cdr screens)))
+    (elscreen-goto 0)))
