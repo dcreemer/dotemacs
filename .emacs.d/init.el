@@ -56,10 +56,15 @@
 (setq savehist-additional-variables '(kill-ring))
 (savehist-mode 1)
 
+(elscreen-start)
+
 (setq desktop-path (list (concat user-emacs-directory "state"))
       desktop-base-file-name "emacs.desktop"
       desktop-restore-frames t)
 (desktop-save-mode 1)
+
+(add-hook 'desktop-save-hook 'elscreen-store-hook)
+(add-hook 'desktop-after-read-hook 'elscreen-load-hook)
 
 ;;
 ;; load custom functions

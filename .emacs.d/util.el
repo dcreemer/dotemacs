@@ -69,3 +69,31 @@ by using nxml's indentation rules."
   (interactive)
   (let ((inhibit-read-only t))
     (erase-buffer)))
+
+;;
+;; load and save elscreen configuration
+;;
+(defvar elscreen-tab-configuration-store-filename
+    (concat user-emacs-directory "/state/elscreen"))
+
+(defun elscreen-store-hook ()
+  "Store the elscreen tab configuration."
+  (with-temp-file elscreen-tab-configuration-store-filename
+    (insert (prin1-to-string (elscreen-get-screen-to-name-alist)))))
+
+(defun elscreen-load-hook ()
+  (let ((screens (reverse
+                  (read
+                   (with-temp-buffer
+                     (insert-file-contents elscreen-tab-configuration-store-filename)
+                     (buffer-string))))))
+    (while screens
+      (setq screen (car (car screens)))
+      (setq buffers (split-string (cdr (car screens)) ":"))
+      (if (eq screen 0)
+          (switch-to-buffer (car buffers))
+        (elscreen-find-and-goto-by-buffer (car buffers) t t))
+      (while (cdr buffers)
+        (switch-to-buffer-other-window (car (cdr buffers)))
+        (setq buffers (cdr buffers)))
+      (setq screens (cdr screens)))))
