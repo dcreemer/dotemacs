@@ -56,10 +56,11 @@
 (setq desktop-path (list user-state-directory)
       desktop-base-file-name "emacs.desktop"
       desktop-restore-frames t)
-(desktop-save-mode 1)
 
 (add-hook 'desktop-save-hook 'elscreen-store-hook)
 (add-hook 'desktop-after-read-hook 'elscreen-load-hook)
+
+(desktop-save-mode 1)
 
 ;;
 ;; simple auto-projects
@@ -136,7 +137,7 @@
 (color-theme-initialize)
 (load-theme 'cyberpunk t)
 (when window-system
-  (set-face-attribute 'default nil :font "DejaVu Sans Mono-12"))
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono-14"))
 
 ;; I need to edit some very large YAML files. Maximum font-lock slows that down
 (setq font-lock-maximum-decoration '((yaml-mode . 1) (t . t)))
