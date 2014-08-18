@@ -70,9 +70,10 @@
 (projectile-global-mode)
 
 ;;
-;; Magit
+;; git
 ;;
 (global-set-key "\C-xg" 'magit-status)
+(setq vc-follow-symlinks t)
 
 ;;
 ;; UI Settings
@@ -87,6 +88,7 @@
 (global-set-key (kbd "C-M-s") 'isearch-forward)
 (global-set-key (kbd "C-M-r") 'isearch-backward)
 (global-set-key '[(meta kp-delete)] 'kill-word)
+(global-set-key (kbd "C-c SPC") 'ace-jump-mode)
 
 ;; better directory traversal
 (ido-mode t)
@@ -146,11 +148,12 @@
 (set-default 'indicate-empty-lines t)
 (setq show-trailing-whitespace t)
 
-;; Use shift key to navigate windows:
+;; Use shift keys and M-P to navigate windows:
 (windmove-default-keybindings 'shift)
+(global-set-key (kbd "M-p") 'ace-window)
 
 ;; make the cursor more visible:
-;(global-hl-line-mode)
+(global-hl-line-mode)
 
 ;; fill column is 1/2 full screen w/with two side-by-side windows on my mac:
 (set-default 'fill-column 95)

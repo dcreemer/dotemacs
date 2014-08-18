@@ -4,6 +4,8 @@
 (source org)
 
 (depends-on "ac-cider")
+(depends-on "ace-jump-mode")
+(depends-on "ace-window")
 (depends-on "auto-complete")
 (depends-on "cask")
 (depends-on "cider")
@@ -14,6 +16,7 @@
 (depends-on "erc-terminal-notifier")
 (depends-on "exec-path-from-shell")
 (depends-on "expand-region")
+(depends-on "git-timemachine")
 (depends-on "go-mode")
 (depends-on "highlight-symbol")
 (depends-on "hilight-symbol")
