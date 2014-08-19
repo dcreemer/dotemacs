@@ -19,7 +19,6 @@
 (depends-on "git-timemachine")
 (depends-on "go-mode")
 (depends-on "highlight-symbol")
-(depends-on "hilight-symbol")
 (depends-on "htmlize")
 (depends-on "httprepl")
 (depends-on "ido-vertical-mode")
