@@ -18,7 +18,7 @@
 ;; packages to load and ensure are found in the .emacs.d/Cask file
 ;;
 
-(require 'cask "/usr/local/Cellar/cask/0.7.0/cask.el")
+(require 'cask "/usr/local/Cellar/cask/0.7.1/cask.el")
 (cask-initialize)
 (require 'pallet)
 
