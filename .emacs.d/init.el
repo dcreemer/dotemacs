@@ -18,7 +18,7 @@
 ;; packages to load and ensure are found in the .emacs.d/Cask file
 ;;
 
-(require 'cask "/usr/local/Cellar/cask/0.7.1/cask.el")
+(require 'cask)
 (cask-initialize)
 (require 'pallet)
 
@@ -139,7 +139,7 @@
 (color-theme-initialize)
 (load-theme 'cyberpunk t)
 (when window-system
-  (set-face-attribute 'default nil :font "DejaVu Sans Mono-14"))
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono-13"))
 
 ;; I need to edit some very large YAML files. Maximum font-lock slows that down
 (setq font-lock-maximum-decoration '((yaml-mode . 1) (t . t)))
@@ -320,22 +320,34 @@
                             (t nil)))
 
 ;;
-;; bitlbee / erc
-;;
-(require 'erc-terminal-notifier)
-
-(defun dc/chat ()
-  "start local chat proxy"
-  (interactive)
-  (erc :server "localhost" :port 6667 :nick bitlbee-erc-username :password bitlbee-erc-password))
-
-;;
 ;; load private configuration
 ;;
 ;; add the private local list directory to load path
 (let ((private-config-file (expand-file-name "private/private.el" user-emacs-directory)))
   (when (file-exists-p private-config-file)
     (load-file private-config-file)))
+
+;;
+;; IRC
+;;
+
+;; (require 'erc-terminal-notifier)
+;; (setq erc-hide-list '("JOIN" "PART" "QUIT")
+;;       erc-echo-notices-in-minibuffer-flag t)
+
+;; (defun dc/chat ()
+;;   "start local chat proxy"
+;;   (interactive)
+;;   (erc :server "localhost" :port 6667 :nick bitlbee-erc-username :password bitlbee-erc-password))
+
+(setq circe-network-options
+      `(("Freenode"
+         :nick "dcreemer"
+         :channels ("#emacs" "#clojure")
+         :nickserv-password ,freenode-password
+         ))
+      circe-reduce-lurker-spam t)
+
 
 ;;
 ;; start emacs server
