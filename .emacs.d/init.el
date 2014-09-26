@@ -169,6 +169,12 @@
 (global-set-key (kbd "C-$") 'eshell)
 (setq eshell-directory-name (state-file "eshell"))
 (setq eshell-aliases-file (expand-file-name "eshell-aliases" user-emacs-directory))
+; remove one space from default eshell prompt
+(setq eshell-prompt-function (function
+                              (lambda ()
+                                (concat (abbreviate-file-name (eshell/pwd))
+                                        (if (= (user-uid) 0) "# " "$ ")))))
+(setq eshell-prompt-regexp "^[^#$\n]*[#$] ")
 
 ;;
 ;; spelling
@@ -214,7 +220,6 @@
 
 (show-paren-mode 1)
 (column-number-mode)
-(global-rainbow-delimiters-mode)
 
 ;; smart parens everywhere, but I don't like the auto-escaping of quotes in quotes
 (require 'smartparens-config)
@@ -234,6 +239,13 @@
 ;; highlight-synbols in all programming modes
 (add-hook 'prog-mode-hook 'highlight-symbol-mode)
 
+;; rainbow parens
+(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+
+;; show indents
+(require 'indent-guide)
+(add-hook 'prog-mode-hook 'indent-guide-mode)
+
 ;; yasnippet
 (require 'yasnippet)
 (yas-reload-all)
@@ -246,8 +258,12 @@
 ;;
 ;; clojure
 ;;
+(require 'clj-refactor)
 (add-hook 'clojure-mode-hook 'subword-mode) ; allow for CamelCase
 (add-hook 'clojure-mode-hook 'auto-complete-mode)
+(add-hook 'clojure-mode-hook (lambda ()
+                               (clj-refactor-mode 1)
+                               (cljr-add-keybindings-with-prefix "C-c C-m")))
 (add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
 (add-hook 'cider-mode-hook 'ac-flyspell-workaround)
 (add-hook 'cider-mode-hook 'ac-cider-setup)
@@ -274,6 +290,7 @@
 ;;
 (add-to-list 'auto-mode-alist '("\\.py$" . python-mode))
 (setq py-electric-colon-active t)
+(setq py-autopep8-options '("--max-line-length=100"))
 (add-hook 'python-mode-hook
           (lambda ()
             (jedi:setup)
@@ -293,8 +310,8 @@
 ;;
 ;; smart-mode-line
 ;;
-(setq sml/theme 'automatic)
-(setq sml/hidden-modes '(" SP" " hl-p" " hl-s"))
+(setq sml/theme 'automatic
+      rm-excluded-modes '(" SP" " hl-p" " hl-s" " ing" " ElDoc"))
 (sml/setup)
 
 ;;
@@ -346,8 +363,10 @@
          :channels ("#emacs" "#clojure")
          :nickserv-password ,freenode-password
          ))
-      circe-reduce-lurker-spam t)
+      circe-reduce-lurker-spam t
+      circe-color-nicks-everywhere t)
 
+(add-hook 'circe-mode-hook 'enable-circe-color-nicks)
 
 ;;
 ;; start emacs server
