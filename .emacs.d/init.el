@@ -70,6 +70,12 @@
 (projectile-global-mode)
 
 ;;
+;; ack -> ack-and-a-half
+;;
+(defalias 'ack 'ack-and-a-half)
+(defalias 'ack-same 'ack-and-a-half-same)
+
+;;
 ;; git
 ;;
 (global-set-key "\C-xg" 'magit-status)
@@ -311,7 +317,7 @@
 ;; smart-mode-line
 ;;
 (setq sml/theme 'automatic
-      rm-excluded-modes '(" SP" " hl-p" " hl-s" " ing" " ElDoc"))
+      rm-excluded-modes '(" MRev" " ," " SP" " hl-p" " hl-s" " ing" " ElDoc" " cljr" " AC" " yas"))
 (sml/setup)
 
 ;;
