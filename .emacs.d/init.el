@@ -316,9 +316,9 @@
 ;;
 ;; smart-mode-line
 ;;
-(setq sml/theme 'automatic
-      rm-excluded-modes '(" MRev" " ," " SP" " hl-p" " hl-s" " ing" " ElDoc" " cljr" " AC" " yas"))
+(setq sml/theme 'automatic)
 (sml/setup)
+(setq rm-excluded-modes '(" MRev" " ," " SP" " hl-p" " hl-s" " ing" " ElDoc" " cljr" " AC" " yas"))
 
 ;;
 ;; in-emacs pandora client. yay.
