@@ -219,7 +219,7 @@
 ;; Code Formatting Globally:
 ;;
 
-;; tabs are 8 charachters, but we never generate them.
+;; tabs are 8 characters, but we never generate them.
 (set-default 'c-basic-offset 4)
 (set-default 'indent-tabs-mode nil)
 (set-default 'tab-width 8)
@@ -290,6 +290,12 @@
 ;; YAML
 ;;
 (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+
+;;
+;; temaplates
+;;
+
+(add-to-list 'auto-mode-alist '("\\.mustache$" . html-mode))
 
 ;;
 ;; Python
