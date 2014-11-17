@@ -61,18 +61,17 @@
 
 ;; load private configuration when it exists
 ;; and also load other packages that depend on it
-(let ((private-config-file (private-file "private.el")))
-  (when (file-exists-p private-config-file)
-    (load-file private-config-file)))
+(load (private-file "private.el") 'noerror)
 
 ;; start emacs server
 (require 'server)
-(when (and (display-graphic-p) (not (server-running-p)))
+(when (and (display-graphic-p)
+           (not (server-running-p)))
   (server-start))
 
 ;; customizations go in a separate file
-(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
-(load custom-file 'noerror)
+(load (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+      'noerror)
 
 (provide 'init)
 
