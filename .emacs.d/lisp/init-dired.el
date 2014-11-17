@@ -9,10 +9,13 @@
 
 (setq-default diredp-hide-details-initially-flag nil
               dired-dwim-target t)
+
 (after-load 'dired
+  (require 'dired)
   (require 'dired+)
   (require 'dired-sort)
-  (setq dired-recursive-deletes 'top))
+  (setq dired-use-ls-dired nil
+        dired-recursive-deletes 'top))
 
 (provide 'init-dired)
 
