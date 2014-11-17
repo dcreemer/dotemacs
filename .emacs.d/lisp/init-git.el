@@ -17,6 +17,7 @@
               magit-diff-refine-hunk t
               magit-completing-read-function 'magit-ido-completing-read)
 
+(require 'magit)
 (diminish 'magit-auto-revert-mode)
 
 (global-git-gutter-mode +1)

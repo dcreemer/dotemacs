@@ -18,6 +18,8 @@
 (add-to-list 'company-backends 'company-anaconda)
 (add-hook 'python-mode-hook 'anaconda-mode)
 (add-hook 'python-mode-hook 'eldoc-mode)
+
+(require 'anaconda-mode)
 (define-key anaconda-mode-map (kbd "M-,") 'anaconda-nav-pop-marker)
 
 (provide 'init-python)
