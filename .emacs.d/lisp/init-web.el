@@ -9,8 +9,10 @@
 (setq w3m-default-display-inline-images t)
 ;; (setq browse-url-browser-function 'w3m-browse-url)
 
+(require-package 'web-mode)
 ;; temaplates
-(add-auto-mode 'html-mode "\\.mustache$")
+(add-auto-mode 'web-mode "\\.html$")
+(add-auto-mode 'web-mode "\\.mustache$")
 
 (provide 'init-web)
 
