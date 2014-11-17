@@ -20,7 +20,7 @@
     (add-to-list 'dash-at-point-mode-alist '(python-mode . "python2,django,gevent"))))
 
 (when (package-installed-p 'dash-at-point)
-  (global-set-key (kbd "C-c D") 'dash-at-point-with-docset))
+  (global-set-key (kbd "C-c D") 'dash-at-point))
 
 (provide 'init-dash)
 
