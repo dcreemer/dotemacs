@@ -1,5 +1,4 @@
 ;;; init-python.el -- setup python dev environment
-;;
 
 ;;; Commentary:
 
