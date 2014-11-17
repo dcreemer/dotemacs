@@ -4,18 +4,13 @@
 
 ;;; Code:
 
-(setq-default blink-cursor-delay 0.4
-              blink-cursor-interval 0.9
-              c-basic-offset 4
-              column-number-mode t
+(setq-default c-basic-offset 4          ; prog indent is 4 chars
+              tab-width 8               ; tabs are 8 characters
+              indent-tabs-mode nil      ; but never inserted
               delete-selection-mode t
-              indent-tabs-mode nil
               scroll-preserve-screen-position 'always
-              show-trailing-whitespace t
-              tab-width 8
-              truncate-lines nil
-              require-final-newline t
-              visible-bell t)
+              sentence-end-double-space nil
+              require-final-newline t)
 
 (dolist (hook '(special-mode-hook
                 eww-mode-hook
@@ -29,6 +24,11 @@
 (after-load 'subword
   (diminish 'subword-mode))
 
+;; UTF-8 everywhere
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+(prefer-coding-system 'utf-8)
+
 ;; ediff
 (setq ediff-split-window-function 'split-window-horizontally
       ediff-diff-options "-w"
@@ -36,16 +36,17 @@
 
 ;; ace-jump
 (require-package 'ace-jump-mode)
-(global-set-key (kbd "C-;") 'ace-jump-mode)
+(global-set-key (kbd "M-j") 'ace-jump-mode)
 
 ;; key preferences
 (define-key global-map (kbd "RET") 'newline-and-indent)
 (global-set-key '[(meta kp-delete)] 'kill-word)
 (defun dc/join-forward ()
-  (interative)
+  "Join the next line to the current one."
+  (interactive)
   (join-line 1))
 
-(global-set-key (kbd "C-c j") 'dc/join-forward)
+(global-set-key (kbd "C-c J") 'dc/join-forward)
 
 ;; turn on some disabled commands
 (put 'narrow-to-defun  'disabled nil)
@@ -70,30 +71,19 @@
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
 (setq mc/list-file (state-file "mc-lists.el"))
 
-;; parens
-
-(show-paren-mode 1)
-
 ;; smartparens
 ;; I don't like the auto-escaping of quotes in quotes
 (require-package 'smartparens)
 (require 'smartparens-config)
 (smartparens-global-mode 1)
+;; smartparens provides it's own show-parens-mode
+(show-smartparens-global-mode t)
 (setq sp-autoescape-string-quote nil)
 (define-key sp-keymap (kbd "C-M-f") 'sp-forward-sexp)
 (define-key sp-keymap (kbd "C-M-b") 'sp-backward-sexp)
 (define-key sp-keymap (kbd "C-M-n") 'sp-next-sexp)
 (define-key sp-keymap (kbd "C-M-p") 'sp-previous-sexp)
 (diminish 'smartparens-mode)
-
-;;
-;; guide-key
-;; popup a window with key completions-annotations
-;;
-(require-package 'guide-key)
-(setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x n" "C-c !"))
-(guide-key-mode 1)
-(diminish 'guide-key-mode)
 
 ;; hilight etc.
 (require-package 'highlight-escape-sequences)
