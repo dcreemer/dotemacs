@@ -12,6 +12,9 @@
 
 (projectile-global-mode)
 
+(after-load 'projectile
+  (define-key projectile-mode-map [remap projectile-grep] 'projectile-ag))
+
 (provide 'init-projectile)
 
 ;;; init-projectile.el ends here
