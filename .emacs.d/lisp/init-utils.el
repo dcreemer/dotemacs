@@ -47,7 +47,7 @@
   (interactive)
   (w3m-browse-url
    (concat
-    "http://www.google.com/search?ie=utf-8&oe=utf-8&q="
+    "https://www.google.com/search?ie=utf-8&oe=utf-8&q="
     (if (region-active-p)
         (buffer-substring (region-beginning) (region-end))
       (read-string "Query: ")))))
