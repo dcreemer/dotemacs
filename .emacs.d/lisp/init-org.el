@@ -7,6 +7,8 @@
 (setq org-startup-indented t
       org-startup-folded "showall")
 
+(require-package 'epresent)
+
 (provide 'init-org)
 
 ;;; init-org.el ends here
