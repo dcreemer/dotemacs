@@ -87,6 +87,9 @@
 (require-package 'alert)
 (setq-default compilation-scroll-output t)
 
+;; fullscreen
+(global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
+
 (provide 'init-ui)
 
 ;;; init-ui.el ends here
