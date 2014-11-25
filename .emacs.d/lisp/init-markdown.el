@@ -10,6 +10,7 @@
 
 (add-hook 'markdown-mode-hook 'yas-minor-mode)
 (add-hook 'markdown-mode-hook 'auto-fill-mode)
+(add-hook 'markdown-mode-hook 'fci-mode)
 
 (provide 'init-markdown)
 
