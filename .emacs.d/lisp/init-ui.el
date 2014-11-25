@@ -32,7 +32,7 @@
 ;; DejaVu Sans Mono
 (when (and (display-graphic-p)
            (find-font (font-spec :name "DejaVu Sans Mono")))
-  (set-frame-font "DejaVu Sans Mono-10" t t))
+  (set-frame-font "DejaVu Sans Mono-12" t t))
 
 ;; set frame title to full path of file:
 (when (display-graphic-p)
