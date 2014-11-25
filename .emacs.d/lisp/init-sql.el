@@ -13,6 +13,9 @@
 (after-load 'page-break-lines
   (push 'sql-mode page-break-lines-modes))
 
+(require 'ggtags)
+(add-hook 'sql-mode-hook 'ggtags-mode)
+
 (provide 'init-sql)
 
 ;;; init-sql.el ends here

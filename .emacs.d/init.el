@@ -42,9 +42,10 @@
 
 (require 'init-markdown)
 (require 'init-org)
+(require 'init-prog)
 (require 'init-projectile)
 (require 'init-nxml)
-(require 'init-prog)
+(require 'init-java)
 (require 'init-python)
 (require 'init-sql)
 (require 'init-lisp)

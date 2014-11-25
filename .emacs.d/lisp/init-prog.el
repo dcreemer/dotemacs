@@ -23,6 +23,9 @@
 (after-load 'indent-guide
   (diminish 'indent-guide-mode))
 
+;; ggtags is great!
+(require-package 'ggtags)
+
 ;; yasnippet
 (require-package 'yasnippet)
 (add-hook 'prog-mode-hook 'yas-minor-mode)
