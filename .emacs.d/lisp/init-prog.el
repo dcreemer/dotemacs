@@ -23,8 +23,13 @@
 (after-load 'indent-guide
   (diminish 'indent-guide-mode))
 
-;; ggtags is great!
+;; gnu global -- ggtags
 (require-package 'ggtags)
+(after-load 'ggtags
+  ;; seems to override keys I like everywhere.
+  (global-set-key (kbd "M->") 'end-of-buffer)
+  (global-set-key (kbd "M-<") 'beginning-of-buffer))
+
 
 ;; yasnippet
 (require-package 'yasnippet)
