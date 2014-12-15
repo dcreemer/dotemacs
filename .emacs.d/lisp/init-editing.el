@@ -54,11 +54,6 @@
 (put 'narrow-to-region 'disabled nil)
 (put 'erase-buffer     'disabled nil)
 
-;; aggressive!
-(require-package 'aggressive-indent)
-(global-aggressive-indent-mode 1)
-(diminish 'aggressive-indent-mode)
-
 ;; expand region
 (require-package 'expand-region)
 (global-set-key (kbd "C-=") 'er/expand-region)
