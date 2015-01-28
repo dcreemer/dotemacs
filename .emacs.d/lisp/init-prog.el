@@ -37,10 +37,10 @@
 
 
 ;; yasnippet
-(require-package 'yasnippet)
-(add-hook 'prog-mode-hook 'yas-minor-mode)
-(after-load 'yasnippet
-  (diminish 'yas-minor-mode))
+;; (require-package 'yasnippet)
+;; (add-hook 'prog-mode-hook 'yas-minor-mode)
+;; (after-load 'yasnippet
+;;   (diminish 'yas-minor-mode))
 
 (provide 'init-prog)
 
