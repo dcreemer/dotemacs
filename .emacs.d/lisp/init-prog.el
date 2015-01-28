@@ -7,11 +7,16 @@
 
 ;; highlight-symbols in all programming modes
 (require-package 'highlight-symbol)
-(dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook))
+(dolist (hook '(prog-mode-hook html-mode-hook css-mode-hook yaml-mode-hook makefile-mode))
   (add-hook hook 'highlight-symbol-mode)
-  (add-hook hook 'highlight-symbol-nav-mode))
+  (add-hook hook 'highlight-symbol-nav-mode)
+  (add-hook hook 'whitespace-mode))
+
 (after-load 'highlight-symbol
   (diminish 'highlight-symbol-mode))
+
+(after-load 'whitespace-mode
+  (diminish 'whitespace-mode))
 
 ;; rainbow parens
 (require-package 'rainbow-delimiters)

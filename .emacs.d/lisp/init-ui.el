@@ -58,7 +58,10 @@
 (setq-default truncate-lines nil)
 
 ;; always show whitespace
-(setq-default show-trailing-whitespace t)
+(require 'whitespace)
+(setq whitespace-line-column 100
+      whitespace-style
+      '(face empty lines-tail spaces space-mark tabs tab-mark trailing))
 
 ;; always show column numbers
 (setq-default column-number-mode t)
