@@ -57,6 +57,7 @@
 (require 'init-web)
 
 ;; no customization needed
+(require-package 'json-mode)
 (require-package 'php-mode)
 (require-package 'yaml-mode)
 
