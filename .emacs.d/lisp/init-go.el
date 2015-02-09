@@ -19,6 +19,7 @@
                   tab-width 4)         ; which are 4 chars...
             (go-eldoc-setup)
             (ggtags-mode 1)
+            (whitespace-mode 0)
             (set (make-local-variable 'company-backends) '(company-go))))
 
 (add-hook 'before-save-hook 'gofmt-before-save)
