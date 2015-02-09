@@ -64,9 +64,10 @@
 ;; I keep my private configs in a separate repo mapped here:
 (defvar user-private-directory
   (expand-file-name "private" user-emacs-directory)
-  "default directory for private data and code")
+  "Default directory for private data and code.")
 
 (defun private-file (path)
+  "Calculate the PATH for a private file."
   (expand-file-name path user-private-directory))
 
 (provide 'init-utils)
