@@ -15,6 +15,9 @@
 (when *is-mac-gui*
   (exec-path-from-shell-initialize))
 
+(when *is-a-mac*
+  (put 'temporary-file-directory 'standard-value '((file-name-as-directory "/tmp"))))
+
 (provide 'init-exec-path)
 
 ;;; init-exec-path.el ends here
