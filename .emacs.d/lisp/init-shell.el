@@ -6,7 +6,7 @@
 ;;; Code:
 
 (require 'eshell)
-(global-set-key (kbd "C-$") 'eshell)
+
 (setq eshell-directory-name (state-file "eshell")
       eshell-aliases-file (expand-file-name "eshell-aliases" user-emacs-directory)
       ;; default shell prompt has an extra space I don't like.
@@ -84,6 +84,36 @@
       (format "\\(%s\\)\\|\\(%s\\)"
               vc-ignore-dir-regexp
               tramp-file-name-regexp))
+
+;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
+(require-package 'multi-term)
+(after-load 'multi-term
+  (global-set-key (kbd "<f5>") 'multi-term)
+  (global-set-key (kbd "s-{") 'multi-term-prev)
+  (global-set-key (kbd "s-}") 'multi-term-next)
+  (setq multi-term-buffer-name "term"
+        multi-term-program "/bin/bash"))
+
+(when (require 'term nil t)
+  (setq term-bind-key-alist
+        (list (cons "C-c C-c" 'term-interrupt-subjob)
+              (cons "C-p" 'previous-line)
+              (cons "C-n" 'next-line)
+              (cons "M-f" 'term-send-forward-word)
+              (cons "M-b" 'term-send-backward-word)
+              (cons "C-c C-j" 'term-line-mode)
+              (cons "C-c C-k" 'term-char-mode)
+              (cons "M-DEL" 'term-send-backward-kill-word)
+              (cons "M-d" 'term-send-forward-kill-word)
+              (cons "<C-left>" 'term-send-backward-word)
+              (cons "<C-right>" 'term-send-forward-word)
+              (cons "C-r" 'term-send-reverse-search-history)
+              (cons "M-p" 'term-send-raw-meta)
+              (cons "M-y" 'term-send-raw-meta)
+              (cons "C-y" 'term-send-raw))))
+
+;; (global-set-key (kbd "C-$") 'multi-term)
+(global-set-key (kbd "C-$") 'eshell)
 
 (provide 'init-shell)
 
