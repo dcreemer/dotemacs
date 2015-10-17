@@ -33,7 +33,10 @@
 (after-load 'ggtags
   ;; seems to override keys I like everywhere.
   (global-set-key (kbd "M->") 'end-of-buffer)
-  (global-set-key (kbd "M-<") 'beginning-of-buffer))
+  (global-set-key (kbd "M-<") 'beginning-of-buffer)
+  (add-hook 'ggtags-mode-hook (lambda ()
+                                (global-set-key (kbd "M->") 'end-of-buffer)
+                                (global-set-key (kbd "M-<") 'beginning-of-buffer))))
 
 
 ;; yasnippet
