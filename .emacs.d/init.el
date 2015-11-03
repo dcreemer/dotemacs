@@ -262,6 +262,40 @@
   (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x n" "C-c !" "C-c p" "C-c p s" "C-x v"))
   (guide-key-mode 1))
 
+(use-package hydra)
+(defhydra hydra-window (:hint nil)
+  "
+          Split: _v_ert  _s_:horz
+         Delete: _c_lose  _o_nly
+  Switch Window: _h_:left  _j_:down  _k_:up  _l_:right
+        Buffers: _p_revious  _n_ext  _b_:select  _f_ind-file  _F_projectile
+         Winner: _u_ndo  _r_edo
+         Resize: _H_:splitter left  _J_:splitter down  _K_:splitter up  _L_:splitter right
+           Move: _a_:up  _z_:down  _i_menu"
+  ("z" scroll-up-line)
+  ("a" scroll-down-line)
+  ("i" idomenu)
+  ("u" winner-undo)
+  ("r" winner-redo)
+  ("h" windmove-left)
+  ("j" windmove-down)
+  ("k" windmove-up)
+  ("l" windmove-right)
+  ("p" previous-buffer)
+  ("n" next-buffer)
+  ("b" ido-switch-buffer)
+  ("f" ido-find-file)
+  ("F" projectile-find-file)
+  ("s" split-window-below)
+  ("v" split-window-right)
+  ("c" delete-window)
+  ("o" delete-other-windows)
+  ("H" hydra-move-splitter-left)
+  ("J" hydra-move-splitter-down)
+  ("K" hydra-move-splitter-up)
+  ("L" hydra-move-splitter-right)
+  ("q" nil))
+(global-set-key (kbd "C-c w") #'hydra-window/body)
 
 ;; spelling
 (use-package ispell
@@ -291,6 +325,14 @@
     (dolist (direction '("right" "left"))
       (global-set-key (kbd (concat "<" multiple "wheel-" direction ">")) 'ignore))))
 
+
+(defhydra hydra-zoom ()
+  "zoom"
+  ("+" text-scale-increase "in")
+  ("=" text-scale-increase "in")
+  ("-" text-scale-decrease "out")
+  ("0" (text-scale-adjust 0) "reset")
+  ("q" nil "quit" :color blue))
 
 ;; -----------------------------------------------------------------------------
 ;; dired
@@ -538,12 +580,24 @@
   (setq org-default-notes-file (concat dc/notes-dir "/inbox.org"))
   (setq org-refile-targets '((org-agenda-files . (:tag . "refile"))))
   (setq org-outline-path-complete-in-steps t)
-  (setq org-refile-use-outline-path t))
+  (setq org-refile-use-outline-path t)
+  (add-hook 'org-mode-hook 'auto-fill-mode))
+
 
 ;; epresent for presentations
 (use-package epresent
   :commands epresent-run)
 
+
+(defhydra hydra-org (:color red :columns 3)
+  "Org Mode Movements"
+  ("n" outline-next-visible-heading "next heading")
+  ("p" outline-previous-visible-heading "prev heading")
+  ("N" org-forward-heading-same-level "next heading at same level")
+  ("P" org-backward-heading-same-level "prev heading at same level")
+  ("u" outline-up-heading "up heading")
+  ("g" org-goto "goto" :exit t))
+(global-set-key (kbd "C-c o") #'hydra-org/body)
 
 ;; -----------------------------------------------------------------------------
 ;; terminal configuration
@@ -614,6 +668,23 @@
   (setq flycheck-idle-change-delay 3.0)
   (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
 
+(defhydra hydra-flycheck
+  (:pre (progn (setq hydra-lv t) (flycheck-list-errors))
+   :post (progn (setq hydra-lv nil) (quit-windows-on "*Flycheck errors*"))
+   :hint nil)
+  "Errors"
+  ("f"  flycheck-error-list-set-filter                            "Filter")
+  ("j"  flycheck-next-error                                       "Next")
+  ("k"  flycheck-previous-error                                   "Previous")
+  ("gg" flycheck-first-error                                      "First")
+  ("G"  (progn (goto-char (point-max)) (flycheck-previous-error)) "Last")
+  ("q"  nil))
+
+(defhydra flycheck-hydra ()
+  "errors"
+  ("n" flycheck-next-error "next")
+  ("p" flycheck-previous-error "previous")
+  ("q" nil "quit"))
 
 ;; try to do company-based completion everywhere
 (use-package company
@@ -738,6 +809,42 @@
   (projectile-global-mode)
   (define-key projectile-mode-map [remap projectile-grep] 'projectile-ag))
 
+(defhydra hydra-projectile (:color teal :hint nil)
+  "
+     PROJECTILE: %(projectile-project-root)
+
+     Find File            Search/Tags          Buffers                Cache
+------------------------------------------------------------------------------------------
+_s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache clear
+ _ff_: file dwim       _g_: update gtags      _b_: switch to buffer  _x_: remove known project
+ _fd_: file curr dir   _o_: multi-occur     _s-k_: Kill all buffers  _X_: cleanup non-existing
+  _r_: recent file                                               ^^^^_z_: cache current
+  _d_: dir
+
+"
+  ("a"   projectile-ag)
+  ("b"   projectile-switch-to-buffer)
+  ("c"   projectile-invalidate-cache)
+  ("d"   projectile-find-dir)
+  ("s-f" projectile-find-file)
+  ("ff"  projectile-find-file-dwim)
+  ("fd"  projectile-find-file-in-directory)
+  ("g"   ggtags-update-tags)
+  ("s-g" ggtags-update-tags)
+  ("i"   projectile-ibuffer)
+  ("K"   projectile-kill-buffers)
+  ("s-k" projectile-kill-buffers)
+  ("m"   projectile-multi-occur)
+  ("o"   projectile-multi-occur)
+  ("s-p" projectile-switch-project "switch project")
+  ("p"   projectile-switch-project)
+  ("s"   projectile-switch-project)
+  ("r"   projectile-recentf)
+  ("x"   projectile-remove-known-project)
+  ("X"   projectile-cleanup-known-projects)
+  ("z"   projectile-cache-current-file)
+  ("`"   hydra-projectile-other-window/body "other window")
+  ("q"   nil "cancel" :color blue))
 
 ;; -----------------------------------------------------------------------------
 ;; Major editing modes
