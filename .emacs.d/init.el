@@ -163,7 +163,7 @@
 (setq-default column-number-mode t)
 
 ;; always show empty space at end of buffer
-(setq indicate-empty-lines t)
+(setq-default indicate-empty-lines t)
 
 ;; make the cursor more visible:
 (global-hl-line-mode)
@@ -175,10 +175,10 @@
 (setq-default c-basic-offset 4)
 
 ;; tabs are 8
-(setq tab-width 8)
+(setq-default tab-width 8)
 
 ;; never insert tabs
-(setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 
 ;; it's nice to be able to overwrite the selection
 (delete-selection-mode +1)
@@ -190,7 +190,7 @@
 (setq sentence-end-double-space nil)
 
 ;; I hate hanging last lines
-(setq require-final-newline t)
+(setq-default require-final-newline t)
 
 ;; UTF-8 everywhere
 (set-terminal-coding-system 'utf-8)
@@ -229,6 +229,7 @@
          ("C-c C-<" . mc/mark-all-like-this))
   :config
   (setq mc/list-file (state-file "mc-lists.el")))
+
 
 ;; smartparens everywhere
 (use-package smartparens
@@ -659,7 +660,7 @@
   :defer t
   :config
   (add-hook 'ggtags-mode-hook (lambda ()
-                                (global-set-key (kbd "M->") 'end-of-buffer) 
+                                (global-set-key (kbd "M->") 'end-of-buffer)
                                 (global-set-key (kbd "M-<") 'beginning-of-buffer))))
 
 
@@ -700,7 +701,6 @@
 
 (use-package magit
   :bind ("C-x g" . magit-status)
-  :diminish magit-auto-revert-mode
   :init
   (use-package git-commit
     :defer t)
@@ -764,7 +764,7 @@
   (setq nxml-slash-auto-complete-flag t))
 
 (defun nxml-pretty-buffer ()
-  "reformat the XML in the whole buffer"
+  "Reformat the XML in the whole buffer."
   (interactive)
   (save-excursion
     (shell-command-on-region (point-min) (point-max) "xmllint --format -" (buffer-name) t)
