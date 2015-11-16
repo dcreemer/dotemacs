@@ -93,7 +93,8 @@
 (setq inhibit-startup-screen t)
 
 (when *is-mac-gui*
-  (setq ns-use-srgb-colorspace t))
+  (setq mac-command-modifier 'super)
+  (setq mac-option-modifier 'meta))
 
 ;; turn on menu-, off tool-, and scroll-bars
 (if (display-graphic-p)
