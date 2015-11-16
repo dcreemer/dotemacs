@@ -457,9 +457,9 @@
 ;; Use shift keys ...
 (windmove-default-keybindings 'shift)
 
-;; and M-P (via ace-window) to navigate windows
+;; and M-J (via ace-window) to navigate windows
 (use-package ace-window
-  :bind ("M-p" . ace-window))
+  :bind ("M-J" . ace-window))
 
 ;; return to same point in a buffer when revisiting the file:
 (use-package saveplace
