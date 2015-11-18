@@ -262,7 +262,7 @@
   :defer 2
   :diminish guide-key-mode
   :config
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x n" "C-c !" "C-c p" "C-c p s" "C-x v"))
+  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x n" "C-x v"))
   (guide-key-mode 1))
 
 (use-package hydra)
@@ -336,6 +336,7 @@
   ("-" text-scale-decrease "out")
   ("0" (text-scale-adjust 0) "reset")
   ("q" nil "quit" :color blue))
+(global-set-key (kbd "C-x C-0") #'hydra-zoom/body)
 
 ;; -----------------------------------------------------------------------------
 ;; dired
@@ -681,13 +682,9 @@
   ("k"  flycheck-previous-error                                   "Previous")
   ("gg" flycheck-first-error                                      "First")
   ("G"  (progn (goto-char (point-max)) (flycheck-previous-error)) "Last")
-  ("q"  nil))
+  ("q"  nil "quit"))
 
-(defhydra flycheck-hydra ()
-  "errors"
-  ("n" flycheck-next-error "next")
-  ("p" flycheck-previous-error "previous")
-  ("q" nil "quit"))
+(global-set-key (kbd "C-c !") #'hydra-flycheck/body)
 
 ;; try to do company-based completion everywhere
 (use-package company
