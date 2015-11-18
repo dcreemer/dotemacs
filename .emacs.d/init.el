@@ -94,7 +94,9 @@
 
 (when *is-mac-gui*
   (setq mac-command-modifier 'super)
-  (setq mac-option-modifier 'meta))
+  (setq mac-option-modifier 'meta)
+  (global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
+  (global-set-key (kbd "s-v") 'clipboard-yank))
 
 ;; turn on menu-, off tool-, and scroll-bars
 (if (display-graphic-p)
