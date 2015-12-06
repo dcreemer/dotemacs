@@ -43,6 +43,12 @@
 (require 'diminish)
 (require 'bind-key)
 
+;; add homebrew site-lisp if present
+(let ((default-directory "/usr/local/share/emacs/site-lisp"))
+  (when (file-exists-p default-directory)
+    (normal-top-level-add-to-load-path '("."))
+    (normal-top-level-add-subdirs-to-load-path)))
+
 
 ;; -----------------------------------------------------------------------------
 ;; define the state of the system
@@ -255,15 +261,12 @@
   :config (turn-on-fci-mode))
 
 
-;; guide-key
-;; popup a window with key completions-annotations
-;; replace with Hydra
-(use-package guide-key
-  :defer 2
-  :diminish guide-key-mode
+;; which-key is great
+(use-package which-key
+  :diminish which-key-mode
   :config
-  (setq guide-key/guide-key-sequence '("C-x r" "C-x 4" "C-x n" "C-x v"))
-  (guide-key-mode 1))
+  (which-key-mode)
+  (which-key-setup-side-window-right))
 
 (use-package hydra)
 (defhydra hydra-window (:hint nil)
@@ -342,7 +345,6 @@
 ;; dired
 ;; -----------------------------------------------------------------------------
 
-
 (use-package dired
   :ensure nil
   :defer t
@@ -365,8 +367,8 @@
 
 ;; use "swiper" instead of isearch
 (use-package swiper
-  :bind (("C-r" . swiper)
-         ("C-s" . swiper)))
+ :bind (("C-r" . swiper)
+        ("C-s" . swiper)))
 
 ;; ace-jump
 (use-package ace-jump-mode
@@ -465,6 +467,9 @@
 (use-package ace-window
   :bind ("M-J" . ace-window))
 
+(use-package golden-ratio
+  :bind ("M-G" . golden-ratio))
+
 ;; return to same point in a buffer when revisiting the file:
 (use-package saveplace
   :ensure nil
@@ -494,49 +499,58 @@
 
 
 ;; -----------------------------------------------------------------------------
-;; IDO smart completion
+;; ok I'll try helm
+;; -----------------------------------------------------------------------------
+
+(use-package helm
+  :defer nil
+  :bind (("C-x b" . helm-mini)
+         ("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("M-y" . helm-show-kill-ring)
+         ("C-c h a" . helm-apropos)
+         ("C-c h i" . helm-info-at-point)
+         ("C-c h l" . helm-locate)
+         ("C-c h m" . helm-man-woman)
+         ("C-c h o" . helm-google-suggest)
+         ("C-c h t" . helm-top))
+  :diminish helm-mode
+  :config
+  (setq helm-locate-command (case system-type
+                              ('gnu/linux "locate %s -e -A --regex %s")
+                              ('berkeley-unix "locate %s %s")
+                              ('windows-nt "es %s %s")
+                              ('darwin "mdfind -name %s %s")
+                              (t "locate %s %s")))
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-z")  'helm-select-action)
+  (helm-mode +1)
+  (use-package helm-descbinds
+    :bind ("C-c h b" . helm-descbinds))
+  (use-package helm-projectile) ; C-c p h
+  (use-package helm-ag
+    :bind ("C-c h g" . helm-ag))
+  (use-package helm-swoop
+    :bind ("C-c h s" . helm-swoop))
+  (use-package helm-dash
+    :bind ("C-c h d" . helm-dash-at-point)
+    :config
+    (setq helm-dash-browser-func 'eww ; good enough
+          helm-dash-docsets-path (state-file "docsets")
+          helm-dash-common-docsets '("emacs"))))
+
+;; TODO: look into:
+;; http://emacsist.com/10477
+;; http://kitchingroup.cheme.cmu.edu/blog/2015/03/14/A-helm-mu4e-contact-selector/
+;; https://github.com/emacs-helm/helm-mu
+
+
+;; -----------------------------------------------------------------------------
+;; Dynamic expansion
 ;; -----------------------------------------------------------------------------
 
 
-(use-package ido
-  :ensure nil
-  :config
-  (ido-mode t)
-  (ido-everywhere t)
-  (setq ido-save-directory-list-file (state-file "ido.last"))
-  ;; http://www.reddit.com/r/emacs/comments/21a4p9/use_recentf_and_ido_together/cgbprem
-  (setq ido-use-virtual-buffers t)
-  (add-hook 'ido-setup-hook (lambda () (define-key ido-completion-map [up] 'previous-history-element)))
-  ;; Allow the same buffer to be open in different frames
-  (setq ido-default-buffer-method 'selected-window))
-
-;; prefer vertical completion lists
-(use-package ido-vertical-mode
-  :init
-  (ido-vertical-mode 1))
-
-;; use flexible matching
-(use-package flx-ido
-  :init
-  (flx-ido-mode 1)
-  :config
-  (setq ido-enable-flex-matching t)
-  (setq ido-use-faces nil))
-
-(use-package ido-ubiquitous
-  :config
-  (ido-ubiquitous-mode t))
-
-;; nice completion and management of M-x
-(use-package smex
-  :bind (("M-x" . smex)
-         ("M-X" . smex-major-mode-commands)
-         ("C-c C-c M-x" . execute-extended-command))
-  :config
-  (smex-initialize)
-  (setq smex-save-file (state-file "smex-items")))
-
-;; dynamic abbreviation expansion
 (use-package hippie-expand
   :ensure nil
   :diminish abbrev-mode
@@ -585,6 +599,7 @@
   (setq org-refile-targets '((org-agenda-files . (:tag . "refile"))))
   (setq org-outline-path-complete-in-steps t)
   (setq org-refile-use-outline-path t)
+  (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
   (add-hook 'org-mode-hook 'auto-fill-mode))
 
 
@@ -668,9 +683,10 @@
   (add-hook 'after-init-hook 'global-flycheck-mode)
   :config
   ;; Override default flycheck triggers
-  (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled))
-  (setq flycheck-idle-change-delay 3.0)
-  (setq flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
+  (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
+        flycheck-idle-change-delay 3.0
+        flycheck-flake8-maximum-line-length 100
+        flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
 
 (defhydra hydra-flycheck
   (:pre (progn (setq hydra-lv t) (flycheck-list-errors))
@@ -856,7 +872,8 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
   :mode ("\\.md\\'" "\\.markdown\\'")
   :config
   (add-hook 'markdown-mode-hook 'auto-fill-mode)
-  (add-hook 'markdown-mode-hook 'fci-mode))
+  (add-hook 'markdown-mode-hook 'fci-mode)
+  (add-hook 'markdown-mode-hook '(lambda () (setq-local helm-dash-docsets '("Markdown")))))
 
 ;; XML
 (use-package nxml-mode
@@ -886,6 +903,8 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 (use-package sql
   :ensure nil
   :defer t
+  :init
+  (add-hook 'sql-mode-hook '(lambda () (setq-local helm-dash-docsets '("MySQL"))))
   :config
   (use-package sql-indent)
   (setq-default sql-input-ring-file-name (state-file ".sqli_history")))
@@ -906,6 +925,7 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
   :mode "\\.py\\'"
   :init
   (add-hook 'python-mode-hook 'eldoc-mode)
+  (add-hook 'python-mode-hook '(lambda () (setq-local helm-dash-docsets '("Python 2"))))
   :config
   (setq flycheck-flake8-maximum-line-length 100))
 
@@ -932,6 +952,7 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
 
 (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
+(add-hook 'emacs-lisp-mode-hook '(lambda () (setq-local helm-dash-docsets '("Emacs Lisp"))))
 
 ;; Clojure
 (use-package cider
@@ -961,14 +982,18 @@ _s-f_: file            _a_: ag                _i_: Ibuffer           _c_: cache 
     (add-hook 'go-mode-hook 'go-eldoc-setup))
   (add-hook 'go-mode-hook
             (lambda ()
-              ;; (setq indent-tabs-mode t) ; gofmt says use tabs...
-              (setq tab-width 4)        ; which are 4 chars...
+              (setq-local indent-tabs-mode t) ; gofmt says use tabs...
+              (setq-local tab-width 4)        ; which are 4 chars...
               (ggtags-mode 1)
               (whitespace-mode 0)))
+  (add-hook 'go-mode-hook '(lambda () (setq-local helm-dash-docsets '("Go"))))
   (use-package go-direx
     :config
     (define-key go-mode-map (kbd "C-c C-j") 'go-direx-pop-to-buffer))
   (add-hook 'before-save-hook 'gofmt-before-save))
+
+;; Shell
+(add-hook 'sh-mode-hook '(lambda () (setq-local helm-dash-docsets '("Bash"))))
 
 
 ;; -----------------------------------------------------------------------------
