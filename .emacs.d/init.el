@@ -282,22 +282,8 @@
     (add-hook 'prog-mode-hook 'flyspell-prog-mode)
     (diminish 'flyspell-mode)))
 
-
 ;; fullscreen
 (global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
-
-
-;; mac scrolling with mouse "wheel"
-(when *is-a-mac*
-  (setq default-input-method "MacOSX")
-  ;; Make mouse wheel / trackpad scrolling less jerky
-  (setq mouse-wheel-scroll-amount '(1
-                                    ((shift) . 5)
-                                    ((control))))
-  (dolist (multiple '("" "double-" "triple-"))
-    (dolist (direction '("right" "left"))
-      (global-set-key (kbd (concat "<" multiple "wheel-" direction ">")) 'ignore))))
-
 
 (defhydra hydra-zoom ()
   "zoom"
