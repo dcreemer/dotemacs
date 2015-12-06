@@ -792,9 +792,8 @@
   (use-package git-commit
     :defer t)
   :config
-  (setq magit-process-popup-time 10)
-  (setq magit-diff-refine-hunk t)
-  (setq magit-completing-read-function 'magit-ido-completing-read))
+  (setq magit-process-popup-time 10
+        magit-diff-refine-hunk t))
 
 
 ;; show git line status in gutter
