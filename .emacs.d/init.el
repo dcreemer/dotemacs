@@ -641,19 +641,6 @@
         flycheck-flake8-maximum-line-length 100
         flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
 
-(defhydra hydra-flycheck
-  (:pre (progn (setq hydra-lv t) (flycheck-list-errors))
-   :post (progn (setq hydra-lv nil) (quit-windows-on "*Flycheck errors*"))
-   :hint nil)
-  "Errors"
-  ("f"  flycheck-error-list-set-filter                            "Filter")
-  ("j"  flycheck-next-error                                       "Next")
-  ("k"  flycheck-previous-error                                   "Previous")
-  ("gg" flycheck-first-error                                      "First")
-  ("G"  (progn (goto-char (point-max)) (flycheck-previous-error)) "Last")
-  ("q"  nil "quit"))
-
-(global-set-key (kbd "C-c !") #'hydra-flycheck/body)
 
 ;; try to do company-based completion everywhere
 (use-package company
