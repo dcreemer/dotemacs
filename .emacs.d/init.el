@@ -731,20 +731,23 @@
 ;; -----------------------------------------------------------------------------
 
 
-;; ediff
-(setq ediff-split-window-function 'split-window-horizontally)
-(setq ediff-diff-options "-w")
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)
-
+(use-package ediff
+  :ensure nil
+  :commands ediff
+  :config
+  (setq ediff-split-window-function 'split-window-horizontally
+        ediff-diff-options "-w"
+        ediff-window-setup-function 'ediff-setup-windows-plain))
 
 ;; Magit is amazing...
-
 (use-package magit
   :bind ("C-x g" . magit-status)
   :init
   (use-package git-commit
     :defer t)
   :config
+  (use-package magit-gh-pulls
+    :defer t)
   (setq magit-process-popup-time 10
         magit-diff-refine-hunk t))
 
@@ -756,17 +759,12 @@
   :config
   (global-git-gutter-mode +1))
 
-
 (use-package git-timemachine
   :defer t)
-
 
 (setq vc-follow-symlinks t)
 
 (use-package github-browse-file
-  :defer t)
-
-(use-package magit-gh-pulls
   :defer t)
 
 (use-package projectile
@@ -923,7 +921,6 @@
 
 
 (use-package restclient
-  :defer t
   :mode "\\.http\\'")
 
 
