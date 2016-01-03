@@ -80,11 +80,11 @@
   (expand-file-name path user-state-directory))
 
 ;; save backup files to common location, and keep more versions
-(setq backup-directory-alist `(("." . ,(state-file "backups"))))
-(setq delete-old-versions t)
-(setq kept-new-versions 3)
-(setq kept-old-versions 2)
-(setq version-control t)
+(setq backup-directory-alist `(("." . ,(state-file "backups")))
+      delete-old-versions t
+      kept-new-versions 3
+      kept-old-versions 2
+      version-control t)
 
 ;; auto-save also goes to state directory
 (setq auto-save-list-file-prefix (state-file "auto-save-list/.saves-"))
@@ -101,8 +101,8 @@
 (when *is-mac-gui*
   (setq mac-command-modifier 'super)
   (setq mac-option-modifier 'meta)
-  (global-set-key (kbd "s-c") 'clipboard-kill-ring-save)
-  (global-set-key (kbd "s-v") 'clipboard-yank))
+  (global-set-key (kbd "s-c") #'clipboard-kill-ring-save)
+  (global-set-key (kbd "s-v") #'clipboard-yank))
 
 ;; turn on menu-, off tool-, and scroll-bars
 (if (display-graphic-p)
@@ -207,10 +207,10 @@
 (prefer-coding-system 'utf-8)
 
 ;; return indents too
-(define-key global-map (kbd "RET") 'newline-and-indent)
+(define-key global-map (kbd "RET") #'newline-and-indent)
 
 ;; kill forward word
-(global-set-key '[(meta kp-delete)] 'kill-word)
+(global-set-key '[(meta kp-delete)] #'kill-word)
 
 ;; like join from vim.
 (defun dc/join-forward ()
@@ -218,7 +218,7 @@
   (interactive)
   (join-line 1))
 
-(global-set-key (kbd "C-c J") 'dc/join-forward)
+(global-set-key (kbd "C-c J") #'dc/join-forward)
 
 ;; turn on some disabled commands
 (put 'narrow-to-defun 'disabled nil)
@@ -278,12 +278,12 @@
   (use-package flyspell
     :if (executable-find ispell-program-name)
     :config
-    (add-hook 'text-mode-hook 'flyspell-mode)
-    (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+    (add-hook 'text-mode-hook #'flyspell-mode)
+    (add-hook 'prog-mode-hook #'flyspell-prog-mode)
     (diminish 'flyspell-mode)))
 
 ;; fullscreen
-(global-set-key (kbd "<s-return>") 'toggle-frame-fullscreen)
+(global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
 
 (defhydra hydra-zoom ()
   "zoom"
@@ -475,9 +475,9 @@
                               ('windows-nt "es %s %s")
                               ('darwin "mdfind -name %s %s")
                               (t "locate %s %s")))
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-z")  'helm-select-action)
+  (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-z") #'helm-select-action)
   (helm-mode +1)
   (use-package helm-descbinds
     :bind ("C-c h b" . helm-descbinds))
@@ -553,7 +553,7 @@
   (setq org-outline-path-complete-in-steps t)
   (setq org-refile-use-outline-path t)
   (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
-  (add-hook 'org-mode-hook 'auto-fill-mode))
+  (add-hook 'org-mode-hook #'auto-fill-mode))
 
 
 ;; epresent for presentations
@@ -587,21 +587,21 @@
 
 (when (require 'term nil t)
   (setq term-bind-key-alist
-        (list (cons "C-c C-c" 'term-interrupt-subjob)
-              (cons "C-p" 'previous-line)
-              (cons "C-n" 'next-line)
-              (cons "M-f" 'term-send-forward-word)
-              (cons "M-b" 'term-send-backward-word)
-              (cons "C-c C-j" 'term-line-mode)
-              (cons "C-c C-k" 'term-char-mode)
-              (cons "M-DEL" 'term-send-backward-kill-word)
-              (cons "M-d" 'term-send-forward-kill-word)
-              (cons "<C-left>" 'term-send-backward-word)
-              (cons "<C-right>" 'term-send-forward-word)
-              (cons "C-r" 'term-send-reverse-search-history)
-              (cons "M-p" 'term-send-raw-meta)
-              (cons "M-y" 'term-send-raw-meta)
-              (cons "C-y" 'term-send-raw))))
+        (list (cons "C-c C-c" #'term-interrupt-subjob)
+              (cons "C-p" #'previous-line)
+              (cons "C-n" #'next-line)
+              (cons "M-f" #'term-send-forward-word)
+              (cons "M-b" #'term-send-backward-word)
+              (cons "C-c C-j" #'term-line-mode)
+              (cons "C-c C-k" #'term-char-mode)
+              (cons "M-DEL" #'term-send-backward-kill-word)
+              (cons "M-d" #'term-send-forward-kill-word)
+              (cons "<C-left>" #'term-send-backward-word)
+              (cons "<C-right>" #'term-send-forward-word)
+              (cons "C-r" #'term-send-reverse-search-history)
+              (cons "M-p" #'term-send-raw-meta)
+              (cons "M-y" #'term-send-raw-meta)
+              (cons "C-y" #'term-send-raw))))
 
 (use-package tramp
   :ensure nil
@@ -633,7 +633,7 @@
 (use-package flycheck
   :defer t
   :init
-  (add-hook 'after-init-hook 'global-flycheck-mode)
+  (add-hook 'after-init-hook #'global-flycheck-mode)
   :config
   ;; Override default flycheck triggers
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
@@ -647,14 +647,14 @@
   :defer t
   :diminish company-mode
   :init
-  (add-hook 'prog-mode-hook 'company-mode)
+  (add-hook 'prog-mode-hook #'company-mode)
   :config
   ;; bigger popup window
-  (setq company-tooltip-limit 20)
-  ;; decrease delay before autocompletion popup shows
-  (setq company-idle-delay .2)
-  ;; remove annoying blinking
-  (setq company-echo-delay 0)
+  (setq company-tooltip-limit 20
+        ;; decrease delay before autocompletion popup shows
+        company-idle-delay .2
+        ;; remove annoying blinking
+        company-echo-delay 0)
   (add-hook 'prog-mode-hook (lambda () (define-key (current-local-map) (kbd "M-SPC") #'company-complete))))
 
 
@@ -698,7 +698,7 @@
   :diminish subword-mode)
 
 
-;; Dash to lookup documentation on Mac OS X
+;; Dash to lookup documentation on Mac OS X (though see helm-dash)
 (use-package dash-at-point
   :if *is-mac-gui*
   :bind ("C-c D" . dash-at-point)
@@ -722,9 +722,9 @@
   :ensure nil
   :commands ediff
   :config
-  (setq ediff-split-window-function 'split-window-horizontally
-        ediff-diff-options "-w"
-        ediff-window-setup-function 'ediff-setup-windows-plain))
+  (setq ediff-split-window-function #'split-window-horizontally
+        ediff-window-setup-function #'ediff-setup-windows-plain
+        ediff-diff-options "-w"))
 
 ;; Magit is amazing...
 (use-package magit
@@ -756,11 +756,11 @@
 
 (use-package projectile
   :config
-  (setq projectile-cache-file (state-file "projectile.cache"))
-  (setq projectile-known-projects-file (state-file "projectile-bookmarks.eld"))
-  (setq projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
+  (setq projectile-cache-file (state-file "projectile.cache")
+        projectile-known-projects-file (state-file "projectile-bookmarks.eld")
+        projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
   (projectile-global-mode)
-  (define-key projectile-mode-map [remap projectile-grep] 'projectile-ag))
+  (define-key projectile-mode-map [remap projectile-grep] #'projectile-ag))
 
 
 ;; -----------------------------------------------------------------------------
@@ -772,8 +772,8 @@
 (use-package markdown-mode
   :mode ("\\.md\\'" "\\.markdown\\'")
   :config
-  (add-hook 'markdown-mode-hook 'auto-fill-mode)
-  (add-hook 'markdown-mode-hook 'fci-mode)
+  (add-hook 'markdown-mode-hook #'auto-fill-mode)
+  (add-hook 'markdown-mode-hook #'fci-mode)
   (add-hook 'markdown-mode-hook '(lambda () (setq-local helm-dash-docsets '("Markdown")))))
 
 ;; XML
@@ -823,7 +823,7 @@
 (use-package python-mode
   :mode "\\.py\\'"
   :init
-  (add-hook 'python-mode-hook 'eldoc-mode)
+  (add-hook 'python-mode-hook #'eldoc-mode)
   (add-hook 'python-mode-hook '(lambda () (setq-local helm-dash-docsets '("Python 2"))))
   :config
   (setq flycheck-flake8-maximum-line-length 100))
@@ -839,8 +839,8 @@
   :config
   (use-package company-anaconda
     :config
-    (add-to-list 'company-backends 'company-anaconda))
-  (define-key anaconda-mode-map (kbd "M-,") 'anaconda-nav-pop-marker))
+    (add-to-list 'company-backends #'company-anaconda)))
+;;  (define-key anaconda-mode-map (kbd "M-,") 'anaconda-nav-pop-marker))
 
 ;; Emacs-lisp
 (use-package elisp-slime-nav
@@ -849,13 +849,15 @@
   :init
   (add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode))
 
-(add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook 'prettify-symbols-mode)
+(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook #'prettify-symbols-mode)
 (add-hook 'emacs-lisp-mode-hook '(lambda () (setq-local helm-dash-docsets '("Emacs Lisp"))))
 
 ;; Clojure
 (use-package cider
   :defer t
+  :init
+  (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
   :config
   (setq nrepl-log-messages t)
   (add-hook 'cider-mode-hook #'eldoc-mode)
@@ -868,8 +870,8 @@
 (use-package clojure-mode
   :defer t
   :config
-  (add-hook 'clojure-mode-hook 'prettify-symbols-mode)
-  (add-hook 'clojure-mode-hook 'clojure-enable-cider))
+  (add-hook 'clojure-mode-hook #'prettify-symbols-mode)
+  (add-hook 'clojure-mode-hook #'clojure-enable-cider))
 
 ;; Go
 (use-package go-mode
@@ -878,7 +880,7 @@
   (use-package company-go)
   (use-package go-eldoc
     :config
-    (add-hook 'go-mode-hook 'go-eldoc-setup))
+    (add-hook 'go-mode-hook #'go-eldoc-setup))
   (add-hook 'go-mode-hook
             (lambda ()
               (setq-local indent-tabs-mode t) ; gofmt says use tabs...
@@ -889,7 +891,7 @@
   (use-package go-direx
     :config
     (define-key go-mode-map (kbd "C-c C-j") 'go-direx-pop-to-buffer))
-  (add-hook 'before-save-hook 'gofmt-before-save))
+  (add-hook 'before-save-hook #'gofmt-before-save))
 
 ;; Shell
 (add-hook 'sh-mode-hook '(lambda () (setq-local helm-dash-docsets '("Bash"))))
