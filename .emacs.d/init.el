@@ -61,6 +61,8 @@
 ;; Mac OS X Emacs.app needs a bit of help getting shell variables
 (use-package exec-path-from-shell
   :if *is-mac-gui*
+  :init
+  (setq exec-path-from-shell-check-startup-files nil)
   :config
   (dolist (var '("SSH_AUTH_SOCK" "SSH_AGENT_PID" "GPG_AGENT_INFO" "LANG" "LC_CTYPE" "GOPATH"))
     (add-to-list 'exec-path-from-shell-variables var))
