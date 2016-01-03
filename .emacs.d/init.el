@@ -573,6 +573,14 @@
   ("g" org-goto "goto" :exit t))
 (global-set-key (kbd "C-c o") #'hydra-org/body)
 
+
+;; todo.txt for todo list management
+(use-package todotxt
+  :bind ("\C-c t" . todotxt)
+  :config
+  (setq todotxt-file "~/Dropbox/Documents/todo/todo.txt"))
+
+
 ;; -----------------------------------------------------------------------------
 ;; terminal configuration
 ;; -----------------------------------------------------------------------------
