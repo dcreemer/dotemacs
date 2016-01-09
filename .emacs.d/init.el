@@ -526,7 +526,7 @@
 
 ;; I store my notes here:
 (defvar dc/notes-dir
-  "~/Dropbox/Documents/Notes"
+  "~/Documents/Notes"
   "Directory for soring and finding notes.")
 
 ;; deft for managing org notes
@@ -578,7 +578,7 @@
 (use-package todotxt
   :bind ("\C-c t" . todotxt)
   :config
-  (setq todotxt-file "~/Dropbox/Documents/todo/todo.txt"))
+  (setq todotxt-file "~/Documents/Todo/todo.txt"))
 
 
 ;; -----------------------------------------------------------------------------
