@@ -496,8 +496,6 @@
           helm-dash-common-docsets '("emacs"))))
 
 ;; TODO: look into:
-;; http://emacsist.com/10477
-;; http://kitchingroup.cheme.cmu.edu/blog/2015/03/14/A-helm-mu4e-contact-selector/
 ;; https://github.com/emacs-helm/helm-mu
 
 
@@ -557,11 +555,9 @@
   (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
   (add-hook 'org-mode-hook #'auto-fill-mode))
 
-
 ;; epresent for presentations
 (use-package epresent
   :commands epresent-run)
-
 
 (defhydra hydra-org (:color red :columns 3)
   "Org Mode Movements"
@@ -572,7 +568,6 @@
   ("u" outline-up-heading "up heading")
   ("g" org-goto "goto" :exit t))
 (global-set-key (kbd "C-c o") #'hydra-org/body)
-
 
 ;; todo.txt for todo list management
 (use-package todotxt
@@ -772,6 +767,8 @@
   (projectile-global-mode)
   (define-key projectile-mode-map [remap projectile-grep] #'projectile-ag))
 
+(use-package ranger
+  :commands ranger)
 
 ;; -----------------------------------------------------------------------------
 ;; Major editing modes
