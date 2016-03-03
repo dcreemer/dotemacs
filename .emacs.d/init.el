@@ -468,7 +468,10 @@
          ("C-c h l" . helm-locate)
          ("C-c h m" . helm-man-woman)
          ("C-c h o" . helm-google-suggest)
-         ("C-c h t" . helm-top))
+         ("C-c h t" . helm-top)
+         :map helm-map
+         ("C-i" . helm-execute-persistent-action)
+         ("C-z" . helm-select-action))
   :diminish helm-mode
   :config
   (setq helm-locate-command (case system-type
@@ -477,9 +480,6 @@
                               ('windows-nt "es %s %s")
                               ('darwin "mdfind -name %s %s")
                               (t "locate %s %s")))
-  (define-key helm-map (kbd "<tab>") #'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-i") #'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-z") #'helm-select-action)
   (helm-mode +1)
   (use-package helm-descbinds
     :bind ("C-c h b" . helm-descbinds))
