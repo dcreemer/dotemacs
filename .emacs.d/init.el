@@ -541,8 +541,7 @@
 
 ;; everyone loves org-mode
 (use-package org
-  :bind (("\C-c a" . org-agenda)
-         ("\C-c l" . org-store-link)
+  :bind (("\C-c l" . org-store-link)
          ("\C-c c" . org-capture))
   :config
   (setq org-startup-indented t)
@@ -553,7 +552,8 @@
   (setq org-outline-path-complete-in-steps t)
   (setq org-refile-use-outline-path t)
   (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
-  (add-hook 'org-mode-hook #'auto-fill-mode))
+  (add-hook 'org-mode-hook #'auto-fill-mode)
+  (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0))))
 
 ;; epresent for presentations
 (use-package epresent
@@ -688,12 +688,12 @@
 
 
 ;; gnu global -- ggtags
-(use-package ggtags
-  :defer t
-  :config
-  (add-hook 'ggtags-mode-hook (lambda ()
-                                (global-set-key (kbd "M->") 'end-of-buffer)
-                                (global-set-key (kbd "M-<") 'beginning-of-buffer))))
+;; (use-package ggtags
+;;   :defer t
+;;   :config
+;;   (add-hook 'ggtags-mode-hook (lambda ()
+;;                                 (global-set-key (kbd "M->") 'end-of-buffer)
+;;                                 (global-set-key (kbd "M-<") 'beginning-of-buffer))))
 
 
 ;; Go, Java, etc. like subwords
@@ -857,7 +857,6 @@
   (add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode))
 
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
-(add-hook 'emacs-lisp-mode-hook #'prettify-symbols-mode)
 (add-hook 'emacs-lisp-mode-hook '(lambda () (setq-local helm-dash-docsets '("Emacs Lisp"))))
 
 ;; Clojure
@@ -869,16 +868,14 @@
   (setq nrepl-log-messages t)
   (add-hook 'cider-mode-hook #'eldoc-mode)
   (add-hook 'cider-mode-hook #'company-mode)
+  (add-hook 'cider-repl-mode-hook #'eldoc-mode)
   (add-hook 'cider-repl-mode-hook #'company-mode)
   (add-hook 'cider-repl-mode-hook #'subword-mode)
   (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
   (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
 
 (use-package clojure-mode
-  :defer t
-  :config
-  (add-hook 'clojure-mode-hook #'prettify-symbols-mode)
-  (add-hook 'clojure-mode-hook #'clojure-enable-cider))
+  :defer t)
 
 ;; Go
 (use-package go-mode
@@ -935,13 +932,19 @@
         (set-visited-file-name new-name)))))
 
 ;; insert current UTC timestamp
-(defun insert-utc ()
+(defun insert-datetime-utc ()
   "Insert the current UTC date and time ast ISO8601."
   (interactive)
   (let ((now (current-time)))
     (set-time-zone-rule t)
     (insert (format-time-string "%FT%TZ" now))
     (set-time-zone-rule nil)))
+
+(defun insert-date-nice ()
+  "Insert the current date in a nice human way."
+  (interactive)
+  (let ((now (current-time)))
+    (insert (format-time-string "%B %d, %Y" now))))
 
 
 ;; -----------------------------------------------------------------------------
