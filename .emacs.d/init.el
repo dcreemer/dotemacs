@@ -241,7 +241,6 @@
   :config
   (setq mc/list-file (state-file "mc-lists.el")))
 
-
 ;; smartparens everywhere
 (use-package smartparens
   :init
@@ -255,13 +254,11 @@
   :config
   (show-smartparens-global-mode t))
 
-
 ;; FCI off for now
 (use-package fill-column-indicator
   :disabled t
   :defer t
   :config (turn-on-fci-mode))
-
 
 ;; which-key is great
 (use-package which-key
@@ -269,8 +266,6 @@
   :config
   (which-key-mode)
   (which-key-setup-side-window-right))
-
-(use-package hydra)
 
 ;; spelling
 (use-package ispell
@@ -287,6 +282,8 @@
 ;; fullscreen
 (global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
 
+(use-package hydra)
+
 (defhydra hydra-zoom ()
   "zoom"
   ("+" text-scale-increase "in")
@@ -296,9 +293,11 @@
   ("q" nil "quit" :color blue))
 (global-set-key (kbd "C-x C-0") #'hydra-zoom/body)
 
+
 ;; -----------------------------------------------------------------------------
 ;; dired
 ;; -----------------------------------------------------------------------------
+
 
 (use-package dired
   :ensure nil
@@ -335,7 +334,7 @@
 ;; -----------------------------------------------------------------------------
 
 
-;; use "selver-searcher" ("ag") instead of grep/ack
+;; use "silver-searcher" ("ag") instead of grep/ack
 (use-package ag
   :defer t
   :init
@@ -457,6 +456,7 @@
 ;; ok I'll try helm
 ;; -----------------------------------------------------------------------------
 
+
 (use-package helm
   :defer nil
   :bind (("C-x b" . helm-mini)
@@ -494,9 +494,6 @@
     (setq helm-dash-browser-func 'eww ; good enough
           helm-dash-docsets-path (state-file "docsets")
           helm-dash-common-docsets '("emacs"))))
-
-;; TODO: look into:
-;; https://github.com/emacs-helm/helm-mu
 
 
 ;; -----------------------------------------------------------------------------
@@ -539,10 +536,15 @@
   ;; (setq deft-use-filter-string-for-filename t)
   (setq deft-auto-save-interval 5.0))
 
+;; look up definitions from dictionary
+(use-package dictionary
+    :bind (("C-c f" . dictionary-search)
+           ("C-c F" . dictionary-match-words)))
+
 ;; everyone loves org-mode
 (use-package org
-  :bind (("\C-c l" . org-store-link)
-         ("\C-c c" . org-capture))
+  :bind (("C-c l" . org-store-link)
+         ("C-c c" . org-capture))
   :config
   (setq org-startup-indented t)
   (setq org-startup-folded "content")
@@ -571,7 +573,7 @@
 
 ;; todo.txt for todo list management
 (use-package todotxt
-  :bind ("\C-c t" . todotxt)
+  :bind ("C-c t" . todotxt)
   :config
   (setq todotxt-file "~/Documents/Todo/todo.txt"))
 
@@ -687,7 +689,7 @@
   (add-hook 'prog-mode-hook #'indent-guide-mode))
 
 
-;; gnu global -- ggtags
+;; gnu global -- ggtags -- off for now, playing with a simpler ctags setup
 ;; (use-package ggtags
 ;;   :defer t
 ;;   :config
@@ -769,6 +771,7 @@
 
 (use-package ranger
   :commands ranger)
+
 
 ;; -----------------------------------------------------------------------------
 ;; Major editing modes
@@ -904,6 +907,7 @@
 ;; -----------------------------------------------------------------------------
 ;; Other...
 ;; -----------------------------------------------------------------------------
+
 
 (use-package fullframe
   :config
