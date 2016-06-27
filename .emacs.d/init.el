@@ -208,9 +208,6 @@
 (set-keyboard-coding-system 'utf-8)
 (prefer-coding-system 'utf-8)
 
-;; return indents too
-(define-key global-map (kbd "RET") #'newline-and-indent)
-
 ;; kill forward word
 (global-set-key '[(meta kp-delete)] #'kill-word)
 
@@ -234,9 +231,9 @@
 
 ;; multiple-cursors
 (use-package multiple-cursors
-  :bind (("C-c m" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
+  :bind (("C-c m"   . mc/edit-lines)
+         ("C->"     . mc/mark-next-like-this)
+         ("C-<"     . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this))
   :config
   (setq mc/list-file (state-file "mc-lists.el")))
@@ -282,6 +279,8 @@
 ;; fullscreen
 (global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
 
+(use-package crux)
+
 (use-package hydra)
 
 (defhydra hydra-zoom ()
@@ -321,8 +320,8 @@
 
 ;; use "swiper" instead of isearch
 (use-package swiper
- :bind (("C-r" . swiper)
-        ("C-s" . swiper)))
+  :bind (("C-r" . swiper)
+         ("C-s" . swiper)))
 
 ;; ace-jump
 (use-package ace-jump-mode
@@ -459,19 +458,19 @@
 
 (use-package helm
   :defer nil
-  :bind (("C-x b" . helm-mini)
-         ("M-x" . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("M-y" . helm-show-kill-ring)
-         ("C-c h a" . helm-apropos)
-         ("C-c h i" . helm-info-at-point)
-         ("C-c h l" . helm-locate)
-         ("C-c h m" . helm-man-woman)
-         ("C-c h o" . helm-google-suggest)
-         ("C-c h t" . helm-top)
+  :bind (("C-x b"    . helm-mini)
+         ("M-x"      . helm-M-x)
+         ("C-x C-f"  . helm-find-files)
+         ("M-y"      . helm-show-kill-ring)
+         ("C-c h a"  . helm-apropos)
+         ("C-c h i"  . helm-info-at-point)
+         ("C-c h l"  . helm-locate)
+         ("C-c h m"  . helm-man-woman)
+         ("C-c h o"  . helm-google-suggest)
+         ("C-c h t"  . helm-top)
          :map helm-map
-         ("C-i" . helm-execute-persistent-action)
-         ("C-z" . helm-select-action))
+         ("C-i"      . helm-execute-persistent-action)
+         ("C-z"      . helm-select-action))
   :diminish helm-mode
   :config
   (setq helm-locate-command (case system-type
@@ -538,8 +537,8 @@
 
 ;; look up definitions from dictionary
 (use-package dictionary
-    :bind (("C-c f" . dictionary-search)
-           ("C-c F" . dictionary-match-words)))
+  :bind (("C-c f" . dictionary-search)
+         ("C-c F" . dictionary-match-words)))
 
 ;; everyone loves org-mode
 (use-package org
@@ -645,7 +644,6 @@
   ;; Override default flycheck triggers
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
         flycheck-idle-change-delay 3.0
-        flycheck-flake8-maximum-line-length 100
         flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
 
 
@@ -748,7 +746,7 @@
 
 ;; show git line status in gutter
 (use-package git-gutter
-  :bind ("C-x C-g" . git-gutter:toggle)
+  :bind ("C-x C-g" . git-gutter-mode)
   :diminish git-gutter-mode
   :config
   (global-git-gutter-mode +1))
@@ -827,30 +825,28 @@
   :mode "\\.ya?ml\\'")
 
 ;; Java
-(add-hook 'java-mode-hook 'ggtags-mode)
+;;(add-hook 'java-mode-hook 'ggtags-mode)
 
 ;; Python
 (use-package python-mode
   :mode "\\.py\\'"
   :init
-  (add-hook 'python-mode-hook #'eldoc-mode)
   (add-hook 'python-mode-hook '(lambda () (setq-local helm-dash-docsets '("Python 2"))))
   :config
-  (setq flycheck-flake8-maximum-line-length 100))
+  (setq flycheck-flake8-maximum-line-length 100)
+  (use-package anaconda-mode
+    :defer t
+    :init
+    (add-hook 'python-mode-hook #'anaconda-mode)
+    :config
+    (use-package company-anaconda
+      :config
+      ;; (define-key anaconda-mode-map (kbd "M-,") 'anaconda-nav-pop-marker)
+      (add-to-list 'company-backends #'company-anaconda))))
 
 (use-package pip-requirements
   :mode (("\\.pip\\'" . pip-requirements-mode)
          ("requirements.*\\.txt\\'" . pip-requirements-mode)))
-
-(use-package anaconda-mode
-  :defer t
-  :init
-  (add-hook 'python-mode-hook #'anaconda-mode)
-  :config
-  (use-package company-anaconda
-    :config
-    (add-to-list 'company-backends #'company-anaconda)))
-;;  (define-key anaconda-mode-map (kbd "M-,") 'anaconda-nav-pop-marker))
 
 ;; Emacs-lisp
 (use-package elisp-slime-nav
@@ -878,7 +874,9 @@
   (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
 
 (use-package clojure-mode
-  :defer t)
+  :defer t
+  :config
+  (add-hook 'clojue-mode-hook '(lambda () (setq-local helm-dash-docsets '("Clojure")))))
 
 ;; Go
 (use-package go-mode
@@ -892,9 +890,8 @@
             (lambda ()
               (setq-local indent-tabs-mode t) ; gofmt says use tabs...
               (setq-local tab-width 4)        ; which are 4 chars...
-              (ggtags-mode 1)
-              (whitespace-mode 0)))
-  (add-hook 'go-mode-hook '(lambda () (setq-local helm-dash-docsets '("Go"))))
+              (whitespace-mode 0)
+              (setq-local helm-dash-docsets '("Go"))))
   (use-package go-direx
     :config
     (define-key go-mode-map (kbd "C-c C-j") 'go-direx-pop-to-buffer))
@@ -902,6 +899,12 @@
 
 ;; Shell
 (add-hook 'sh-mode-hook '(lambda () (setq-local helm-dash-docsets '("Bash"))))
+
+;; Elixir
+(use-package elixir-mode
+  :mode ("\\.exs\\'" "\\.ex\\'")
+  :config
+  (use-package alchemist))
 
 
 ;; -----------------------------------------------------------------------------
@@ -914,10 +917,8 @@
   (fullframe list-packages quit-window)
   (fullframe ibuffer ibuffer-quit))
 
-
 (use-package restclient
   :mode "\\.http\\'")
-
 
 ;; Rename the current file
 (defun rename-this-file-and-buffer (new-name)
