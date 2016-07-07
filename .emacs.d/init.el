@@ -279,7 +279,9 @@
 ;; fullscreen
 (global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
 
-(use-package crux)
+(use-package crux
+  :bind (("C-c n"   . crux-cleanup-buffer-or-region)
+         ("C-x 4 t" . crux-transpose-windows)))
 
 (use-package hydra)
 
@@ -780,6 +782,7 @@
 (use-package markdown-mode
   :mode ("\\.md\\'" "\\.markdown\\'")
   :config
+  (use-package flymd)
   (add-hook 'markdown-mode-hook #'auto-fill-mode)
   (add-hook 'markdown-mode-hook #'fci-mode)
   (add-hook 'markdown-mode-hook '(lambda () (setq-local helm-dash-docsets '("Markdown")))))
@@ -831,17 +834,15 @@
 (use-package python-mode
   :mode "\\.py\\'"
   :init
-  (add-hook 'python-mode-hook '(lambda () (setq-local helm-dash-docsets '("Python 2"))))
-  :config
-  (setq flycheck-flake8-maximum-line-length 100)
+  (add-hook 'python-mode-hook '(lambda ()
+                                 (setq-local helm-dash-docsets '("Python 2"))
+                                 (anaconda-mode 1)))
+  (setq-default flycheck-flake8-maximum-line-length 100)
   (use-package anaconda-mode
-    :defer t
-    :init
-    (add-hook 'python-mode-hook #'anaconda-mode)
     :config
     (use-package company-anaconda
       :config
-      ;; (define-key anaconda-mode-map (kbd "M-,") 'anaconda-nav-pop-marker)
+      (define-key anaconda-mode-map (kbd "M-,") 'anaconda-mode-go-back)
       (add-to-list 'company-backends #'company-anaconda))))
 
 (use-package pip-requirements
