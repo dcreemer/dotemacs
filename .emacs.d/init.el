@@ -273,6 +273,8 @@
     :if (executable-find ispell-program-name)
     :config
     (add-hook 'text-mode-hook #'flyspell-mode)
+    ;; only check comments and docs, not strings:
+    (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
     (add-hook 'prog-mode-hook #'flyspell-prog-mode)
     (diminish 'flyspell-mode)))
 
