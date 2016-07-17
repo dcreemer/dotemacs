@@ -281,8 +281,11 @@
 ;; fullscreen
 (global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
 
+;; various nice crux commands
 (use-package crux
   :bind (("C-c n"   . crux-cleanup-buffer-or-region)
+         ("C-a"     . crux-move-beginning-of-line)
+         ("C-c u"   . crux-view-url)
          ("C-x 4 t" . crux-transpose-windows)))
 
 (use-package hydra)
