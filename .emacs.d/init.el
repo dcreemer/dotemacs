@@ -49,6 +49,8 @@
     (normal-top-level-add-to-load-path '("."))
     (normal-top-level-add-subdirs-to-load-path)))
 
+(use-package dash
+  :defer t)
 
 ;; -----------------------------------------------------------------------------
 ;; define the state of the system
@@ -510,7 +512,7 @@
 (use-package hippie-expand
   :ensure nil
   :diminish abbrev-mode
-  :bind (("M-SPC" . hippie-expand)
+  :bind (("M-SPC" . hippie-expand) ; may change to auto-completion
          ("M-/" . hippie-expand))
   :config
   (setq hippie-expand-try-functions-list '(try-complete-file-name-partially
@@ -783,6 +785,10 @@
 ;; -----------------------------------------------------------------------------
 
 
+;; some modes use dumb-jump
+(use-package dumb-jump
+  :defer t)
+
 ;; markdown
 (use-package markdown-mode
   :mode ("\\.md\\'" "\\.markdown\\'")
@@ -844,6 +850,7 @@
                                  (anaconda-mode 1)))
   (setq-default flycheck-flake8-maximum-line-length 100)
   (use-package anaconda-mode
+    :defer t
     :config
     (use-package company-anaconda
       :config
@@ -882,7 +889,7 @@
 (use-package clojure-mode
   :defer t
   :config
-  (add-hook 'clojue-mode-hook '(lambda () (setq-local helm-dash-docsets '("Clojure")))))
+  (add-hook 'clojure-mode-hook '(lambda () (setq-local helm-dash-docsets '("Clojure")))))
 
 ;; Go
 (use-package go-mode
@@ -898,6 +905,8 @@
               (setq-local tab-width 4)        ; which are 4 chars...
               (whitespace-mode 0)
               (setq-local helm-dash-docsets '("Go"))))
+  (define-key go-mode-map (kbd "M-.") #'dumb-jump-go)
+  (define-key go-mode-map (kbd "M-,") #'dumb-jump-back)
   (use-package go-direx
     :config
     (define-key go-mode-map (kbd "C-c C-j") 'go-direx-pop-to-buffer))
@@ -910,7 +919,9 @@
 (use-package elixir-mode
   :mode ("\\.exs\\'" "\\.ex\\'")
   :config
-  (use-package alchemist))
+  (use-package alchemist)
+  :config
+  (add-hook 'elixir-mode-hook '(lambda () (setq-local helm-dash-docsets '("Elixir" "Erlang")))))
 
 
 ;; -----------------------------------------------------------------------------
