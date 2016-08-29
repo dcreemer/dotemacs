@@ -563,7 +563,11 @@
   (setq org-refile-use-outline-path t)
   (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
   (add-hook 'org-mode-hook #'auto-fill-mode)
-  (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0))))
+  (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0)))
+  (set-face-attribute 'org-document-title nil :foreground "#4c83ff" :height 1.0)
+  (set-face-attribute 'org-level-1 nil :foreground "#ff1493" :height 1.0)
+  (set-face-attribute 'org-level-2 nil :foreground "#ffff00" :height 1.0)
+  (set-face-attribute 'org-level-3 nil :foreground "#4c83ff" :height 1.0))
 
 ;; epresent for presentations
 (use-package epresent
