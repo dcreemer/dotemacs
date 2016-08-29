@@ -1,6 +1,7 @@
 *.elc
 \#*
 *~
+/.emacs.d/custom.el
 /.emacs.d/state
 /.emacs.d/bookmarks
 /.emacs.d/elpa
