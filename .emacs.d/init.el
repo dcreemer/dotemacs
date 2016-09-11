@@ -233,10 +233,7 @@
 
 ;; multiple-cursors
 (use-package multiple-cursors
-  :bind (("C-c m"   . mc/edit-lines)
-         ("C->"     . mc/mark-next-like-this)
-         ("C-<"     . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this))
+  :bind (("s-<mouse-1>" . mc/add-cursor-on-click))
   :config
   (setq mc/list-file (state-file "mc-lists.el")))
 
@@ -552,6 +549,7 @@
 ;; everyone loves org-mode
 (use-package org
   :bind (("C-c l" . org-store-link)
+         ("C-c a" . org-agenda)
          ("C-c c" . org-capture))
   :config
   (setq org-startup-indented t)
