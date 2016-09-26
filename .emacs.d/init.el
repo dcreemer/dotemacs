@@ -671,6 +671,8 @@
         company-idle-delay .2
         ;; remove annoying blinking
         company-echo-delay 0)
+  (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
   (add-hook 'prog-mode-hook (lambda () (define-key (current-local-map) (kbd "M-SPC") #'company-complete))))
 
 
