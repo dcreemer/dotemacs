@@ -549,7 +549,7 @@
 ;; everyone loves org-mode
 (use-package org
   :bind (("C-c l" . org-store-link)
-         ("C-c a" . org-agenda)
+         ;("C-c a" . org-agenda)
          ("C-c c" . org-capture))
   :config
   (setq org-startup-indented t)
