@@ -519,11 +519,32 @@
                                            try-expand-dabbrev-all-buffers
                                            try-expand-dabbrev-from-kill)))
 
+(use-package yasnippet
+  :defer t
+  :init
+  (add-hook 'prog-mode-hook #'yas-minor-mode)
+  :config
+  (yas-reload-all))
 
 ;; -----------------------------------------------------------------------------
 ;; Org and friends
 ;; -----------------------------------------------------------------------------
 
+(defun dc/find-monday ()
+  "Return a date that is the Monday of this week."
+  (let* ((now (decode-time))
+         (r (cdddr now))
+         (dow (nth 3 r))
+         (dom (car r))
+         (ndom (- dom (- dow 1))))
+    (apply 'encode-time (append (list 0 0 0 ndom) (cdr r)))))
+
+(defun dc/workday (n)
+  "Return a date for N days since Monday."
+  (time-add (dc/find-monday) (days-to-time n)))
+
+(defun dc/week-workday (n)
+  (format-time-string "%B %d, %Y (%A)" (dc/workday n)))
 
 ;; I store my notes here:
 (defvar dc/notes-dir
@@ -563,6 +584,7 @@
   (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0)))
+  (add-hook 'org-mode-hook #'yas-minor-mode)
   (set-face-attribute 'org-document-title nil :foreground "#4c83ff" :height 1.0)
   (set-face-attribute 'org-level-1 nil :foreground "#ff1493" :height 1.0)
   (set-face-attribute 'org-level-2 nil :foreground "#ffff00" :height 1.0)
@@ -792,7 +814,14 @@
 
 ;; some modes use dumb-jump
 (use-package dumb-jump
-  :defer t)
+  :defer t
+  :init
+  (defun dc/add-dumb-jump ()
+    "Add dumb jump commands to current keymap"
+    (define-key (current-local-map) (kbd "M-.") #'dumb-jump-go)
+    (define-key (current-local-map) (kbd "M-?") #'dumb-jump-quick-look)
+    (define-key (current-local-map) (kbd "M-,") #'dumb-jump-back))
+  (add-hook 'prog-mode-hook #'dc/add-dumb-jump))
 
 ;; markdown
 (use-package markdown-mode
@@ -857,9 +886,10 @@
   (use-package anaconda-mode
     :defer t
     :config
+    (add-hook 'anaconda-mode-hook #'dc/add-dumb-jump)
     (use-package company-anaconda
       :config
-      (define-key anaconda-mode-map (kbd "M-,") 'anaconda-mode-go-back)
+      ; (define-key anaconda-mode-map (kbd "M-,") 'anaconda-mode-go-back)
       (add-to-list 'company-backends #'company-anaconda))))
 
 (use-package pip-requirements
@@ -910,8 +940,6 @@
               (setq-local tab-width 4)        ; which are 4 chars...
               (whitespace-mode 0)
               (setq-local helm-dash-docsets '("Go"))))
-  (define-key go-mode-map (kbd "M-.") #'dumb-jump-go)
-  (define-key go-mode-map (kbd "M-,") #'dumb-jump-back)
   (use-package go-direx
     :config
     (define-key go-mode-map (kbd "C-c C-j") 'go-direx-pop-to-buffer))
@@ -971,7 +999,7 @@
   "Insert the current date in a nice human way."
   (interactive)
   (let ((now (current-time)))
-    (insert (format-time-string "%B %d, %Y" now))))
+    (insert (format-time-string "%A, %B %d, %Y" now))))
 
 
 ;; -----------------------------------------------------------------------------
