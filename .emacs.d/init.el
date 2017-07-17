@@ -171,7 +171,7 @@
   :diminish whitespace-mode
   :config
   (setq whitespace-line-column 100)
-  (setq whitespace-style '(face empty lines-tail spaces space-mark tabs tab-mark trailing)))
+  (setq whitespace-style '(face empty lines-tail trailing)))
 
 ;; always show column numbers
 (setq-default column-number-mode t)
@@ -846,7 +846,9 @@
 
 ;; JSON
 (use-package json-mode
-  :mode "\\.json\\'")
+  :mode "\\.json\\'"
+  :config
+  (use-package json-navigator))
 
 ;; SQL
 (use-package sql
@@ -866,25 +868,29 @@
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
 
+;; HTML
+(use-package html-mode
+  :ensure nil
+  :defer t
+  :mode ("\\.tpl\\'" "\\.htm\\'" "\\.html\\'"))
+
 ;; Java
 ;;(add-hook 'java-mode-hook 'ggtags-mode)
 
 ;; Python
 (use-package python-mode
   :mode "\\.py\\'"
-  :init
+  :config
   (add-hook 'python-mode-hook '(lambda ()
-                                 (setq-local helm-dash-docsets '("Python 2"))
-                                 (anaconda-mode 1)))
-  (setq-default flycheck-flake8-maximum-line-length 100)
-  (use-package anaconda-mode
-    :defer t
+                                 (setq-local helm-dash-docsets '("Python 2"))))
+  (use-package virtualenvwrapper
+    :init
+    (require 'auto-virtualenvwrapper))
+  (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
+  (add-hook 'projectile-after-switch-project-hook #'auto-virtualenvwrapper-activate)
+  (use-package company-jedi
     :config
-    (add-hook 'anaconda-mode-hook #'dc/add-dumb-jump)
-    (use-package company-anaconda
-      :config
-      ; (define-key anaconda-mode-map (kbd "M-,") 'anaconda-mode-go-back)
-      (add-to-list 'company-backends #'company-anaconda))))
+    (add-to-list 'company-backends 'company-jedi)))
 
 (use-package pip-requirements
   :mode (("\\.pip\\'" . pip-requirements-mode)
@@ -903,8 +909,8 @@
 ;; Clojure
 (use-package cider
   :defer t
-  :init
-  (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+  ;; :init
+  ;; (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
   :config
   (setq nrepl-log-messages t)
   (add-hook 'cider-mode-hook #'eldoc-mode)
@@ -947,7 +953,6 @@
   :mode ("\\.exs\\'" "\\.ex\\'")
   :config
   (use-package alchemist)
-  :config
   (add-hook 'elixir-mode-hook '(lambda () (setq-local helm-dash-docsets '("Elixir" "Erlang")))))
 
 
@@ -960,9 +965,6 @@
   :config
   (fullframe list-packages quit-window)
   (fullframe ibuffer ibuffer-quit))
-
-(use-package restclient
-  :mode "\\.http\\'")
 
 ;; Rename the current file
 (defun rename-this-file-and-buffer (new-name)
