@@ -75,6 +75,10 @@
 (when *is-a-mac*
   (put 'temporary-file-directory 'standard-value '((file-name-as-directory "/tmp"))))
 
+;; in terminals, enable basic mouse support
+(unless (display-graphic-p)
+  (xterm-mouse-mode 1))
+
 ;; keep transient state in a custom directory
 (defvar user-state-directory
   (expand-file-name "state" user-emacs-directory)
@@ -883,9 +887,11 @@
   :config
   (add-hook 'python-mode-hook '(lambda ()
                                  (setq-local helm-dash-docsets '("Python 2"))))
+  (setq python-shell-interpreter "ipython"
+        python-shell-interpreter-args "-i")
   (use-package virtualenvwrapper
     :init
-    (require 'auto-virtualenvwrapper))
+    (use-package auto-virtualenvwrapper))
   (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
   (add-hook 'projectile-after-switch-project-hook #'auto-virtualenvwrapper-activate)
   (use-package company-jedi
