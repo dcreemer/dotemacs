@@ -290,7 +290,7 @@
   :bind (("C-c n"   . crux-cleanup-buffer-or-region)
          ("C-a"     . crux-move-beginning-of-line)
          ("C-c u"   . crux-view-url)
-         ("C-x 4 t" . crux-transpose-windows)))
+         ("C-x t" . crux-transpose-windows)))
 
 (use-package hydra)
 
@@ -501,7 +501,7 @@
   (use-package helm-dash
     :bind ("C-c h d" . helm-dash-at-point)
     :config
-    (setq helm-dash-browser-func 'eww ; good enough
+    (setq helm-dash-browser-func 'w3m ; good enough
           helm-dash-docsets-path (state-file "docsets")
           helm-dash-common-docsets '("emacs"))))
 
