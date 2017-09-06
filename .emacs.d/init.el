@@ -721,15 +721,6 @@
   (add-hook 'prog-mode-hook #'indent-guide-mode))
 
 
-;; gnu global -- ggtags -- off for now, playing with a simpler ctags setup
-;; (use-package ggtags
-;;   :defer t
-;;   :config
-;;   (add-hook 'ggtags-mode-hook (lambda ()
-;;                                 (global-set-key (kbd "M->") 'end-of-buffer)
-;;                                 (global-set-key (kbd "M-<") 'beginning-of-buffer))))
-
-
 ;; Go, Java, etc. like subwords
 (use-package subword
   :ensure nil
