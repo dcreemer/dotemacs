@@ -792,9 +792,21 @@
   (projectile-global-mode)
   (define-key projectile-mode-map [remap projectile-grep] #'projectile-ag))
 
-(use-package ranger
-  :commands ranger)
-
+(use-package treemacs
+  :defer t
+  :config
+  (setq treemacs-follow-after-init          t
+        treemacs-git-integration            t
+        treemacs-collapse-dirs              3)
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (use-package treemacs-projectile
+    :defer t
+    :config
+    (setq treemacs-header-function #'treemacs-projectile-create-header)
+    :bind (:map global-map
+                ("C-c p 0" . treemacs-projectile)
+                ("C-c p 9" . treemacs-projectile-toggle))))
 
 ;; -----------------------------------------------------------------------------
 ;; Major editing modes
