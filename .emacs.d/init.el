@@ -46,7 +46,6 @@
 ;; add homebrew site-lisp if present
 (let ((default-directory "/usr/local/share/emacs/site-lisp"))
   (when (file-exists-p default-directory)
-    (normal-top-level-add-to-load-path '("."))
     (normal-top-level-add-subdirs-to-load-path)))
 
 (use-package dash
