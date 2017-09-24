@@ -138,10 +138,11 @@
     :config
     (load-theme 'cyberpunk t)))
 
-;; DejaVu Sans Mono
+;; set the font
+;; Alternative fonts include: DejaVu Sans Mono, and Andale Mono 12
 (when (and (display-graphic-p)
-           (find-font (font-spec :name "DejaVu Sans Mono")))
-  (set-frame-font "DejaVu Sans Mono-12" t t))
+           (find-font (font-spec :name "Source Code Pro")))
+  (set-frame-font "Source Code Pro 12" t t))
 
 ;; set frame title to full path of file:
 (when (display-graphic-p)
