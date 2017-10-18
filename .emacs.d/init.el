@@ -187,7 +187,7 @@
 (global-hl-line-mode)
 
 ;; fill column is 1/2 full screen w/with two side-by-side windows on my mac:
-(setq-default fill-column 100)
+(setq-default fill-column 85)
 
 ;; indent is 4 charactes
 (setq-default c-basic-offset 4)
@@ -578,6 +578,7 @@
          ;("C-c a" . org-agenda)
          ("C-c c" . org-capture))
   :config
+  (unbind-key "C-#" org-mode-map) ;; I use this for other things
   (setq org-startup-indented t)
   (setq org-startup-folded "content")
   (setq org-agenda-files (list dc/notes-dir))
@@ -613,6 +614,15 @@
 ;; terminal configuration
 ;; -----------------------------------------------------------------------------
 
+(use-package eshell
+  :ensure nil)
+  ;; :config
+  ;; (use-package em-smart
+  ;;   :ensure nil
+  ;;   :config
+  ;;   (setq eshell-where-to-jump 'begin
+  ;;         eshell-review-quick-commands nil
+  ;;         eshell-smart-space-goes-to-end t)))
 
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 (use-package multi-term
@@ -801,7 +811,6 @@
   (treemacs-follow-mode t)
   (treemacs-filewatch-mode t)
   (use-package treemacs-projectile
-    :defer t
     :config
     (setq treemacs-header-function #'treemacs-projectile-create-header)
     :bind (:map global-map
