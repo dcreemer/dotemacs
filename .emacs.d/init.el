@@ -876,10 +876,6 @@
   (use-package sql-indent)
   (setq-default sql-input-ring-file-name (state-file ".sqli_history")))
 
-;; PHP
-(use-package php-mode
-  :mode "\\.php\\'")
-
 ;; YAML
 (use-package yaml-mode
   :mode "\\.ya?ml\\'")
