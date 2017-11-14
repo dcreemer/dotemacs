@@ -940,6 +940,13 @@
   :config
   (add-hook 'clojure-mode-hook '(lambda () (setq-local helm-dash-docsets '("Clojure")))))
 
+(use-package parinfer
+  :ensure t
+  :bind
+  (("C-," . parinfer-toggle-mode))
+  :init
+  (add-hook 'clojure-mode-hook #'parinfer-mode))
+
 ;; Go
 (use-package go-mode
   :mode "\\.go\\'"
