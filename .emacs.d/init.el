@@ -5,11 +5,9 @@
 
 ;;; Code:
 
-
 ;; -----------------------------------------------------------------------------
 ;; bootstrap the package system
 ;; -----------------------------------------------------------------------------
-
 
 (require 'package)
 
@@ -54,7 +52,6 @@
 ;; -----------------------------------------------------------------------------
 ;; define the state of the system
 ;; -----------------------------------------------------------------------------
-
 
 (defconst *is-a-mac* (eq system-type 'darwin))
 (defconst *is-mac-gui* (and (display-graphic-p) *is-a-mac*))
@@ -101,7 +98,6 @@
 ;; -----------------------------------------------------------------------------
 ;; setup text editing and the user interface the way I like it.
 ;; -----------------------------------------------------------------------------
-
 
 ;; I know what program I'm using
 (setq inhibit-startup-screen t)
@@ -308,7 +304,6 @@
 ;; dired
 ;; -----------------------------------------------------------------------------
 
-
 (use-package dired
   :ensure nil
   :defer t
@@ -323,11 +318,9 @@
   (setq dired-use-ls-dired nil)
   (setq dired-recursive-deletes 'top))
 
-
 ;; -----------------------------------------------------------------------------
 ;; in-buffer search and movement
 ;; -----------------------------------------------------------------------------
-
 
 ;; use "swiper" instead of isearch
 (use-package swiper
@@ -338,11 +331,9 @@
 (use-package ace-jump-mode
   :bind ("M-j" . ace-jump-mode))
 
-
 ;; -----------------------------------------------------------------------------
 ;; multi-file search
 ;; -----------------------------------------------------------------------------
-
 
 ;; use "silver-searcher" ("ag") instead of grep/ack
 (use-package ag
@@ -360,11 +351,9 @@
 (when *is-a-mac*
   (setq-default locate-command "mdfind"))
 
-
 ;; -----------------------------------------------------------------------------
 ;; buffer management
 ;; -----------------------------------------------------------------------------
-
 
 ;; buffers should have unique names
 (use-package uniquify
@@ -418,11 +407,9 @@
   (add-hook 'ibuffer-hook 'ibuffer-set-up-preferred-filters)
   (setq ibuffer-filter-group-name-face 'font-lock-doc-face))
 
-
 ;; -----------------------------------------------------------------------------
 ;; window and session management
 ;; -----------------------------------------------------------------------------
-
 
 ;; Use shift keys ...
 (windmove-default-keybindings 'shift)
@@ -461,11 +448,9 @@
   (setq recentf-exclude '("/tmp/" "/ssh:"))
   (recentf-mode +1))
 
-
 ;; -----------------------------------------------------------------------------
-;; ok I'll try helm
+;; helm
 ;; -----------------------------------------------------------------------------
-
 
 (use-package helm
   :defer nil
@@ -505,11 +490,9 @@
           helm-dash-docsets-path (state-file "docsets")
           helm-dash-common-docsets '("emacs"))))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Dynamic expansion
 ;; -----------------------------------------------------------------------------
-
 
 (use-package hippie-expand
   :ensure nil
@@ -579,6 +562,7 @@
          ("C-c c" . org-capture))
   :config
   (unbind-key "C-#" org-mode-map) ;; I use this for other things
+  (unbind-key "C-_" org-mode-map) ;; don't shadow default undo
   (setq org-startup-indented t)
   (setq org-startup-folded "content")
   (setq org-agenda-files (list dc/notes-dir))
@@ -608,7 +592,6 @@
   ("u" outline-up-heading "up heading")
   ("g" org-goto "goto" :exit t))
 (global-set-key (kbd "C-c o") #'hydra-org/body)
-
 
 ;; -----------------------------------------------------------------------------
 ;; terminal configuration
@@ -659,11 +642,9 @@
   ;; prevent tramp from attempting to figure out VC status
   (setq vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)" vc-ignore-dir-regexp tramp-file-name-regexp)))
 
-
 ;; -----------------------------------------------------------------------------
 ;; web browsing
 ;; -----------------------------------------------------------------------------
-
 
 (use-package w3m
   :commands w3m
@@ -671,11 +652,9 @@
   ;; (setq browse-url-browser-function 'w3m-browse-url)
   (setq w3m-default-display-inline-images t))
 
-
 ;; -----------------------------------------------------------------------------
 ;; General programming configuration begins here
 ;; -----------------------------------------------------------------------------
-
 
 ;; use flycheck everywhere we can
 (use-package flycheck
@@ -687,7 +666,6 @@
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
         flycheck-idle-change-delay 3.0
         flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
-
 
 ;; try to do company-based completion everywhere
 (use-package company
@@ -706,7 +684,6 @@
   (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
   (add-hook 'prog-mode-hook (lambda () (define-key (current-local-map) (kbd "M-SPC") #'company-complete))))
 
-
 ;; highlight-symbols in all programming modes
 (use-package highlight-symbol
   :defer t
@@ -715,13 +692,11 @@
   (add-hook 'prog-mode-hook #'highlight-symbol-mode)
   (add-hook 'prog-mode-hook #'highlight-symbol-nav-mode))
 
-
 ;; rainbow parens!
 (use-package rainbow-delimiters
   :defer t
   :init
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
 
 ;; show indents guides
 (use-package indent-guide
@@ -730,13 +705,11 @@
   :init
   (add-hook 'prog-mode-hook #'indent-guide-mode))
 
-
 ;; Go, Java, etc. like subwords
 (use-package subword
   :ensure nil
   :defer 2
   :diminish subword-mode)
-
 
 ;; Dash to lookup documentation on Mac OS X (though see helm-dash)
 (use-package dash-at-point
@@ -745,18 +718,15 @@
   :config
   (add-to-list 'dash-at-point-mode-alist '(python-mode . "python2,django,gevent")))
 
-
 ;; playing with regular expressions
 (use-package regex-tool
   :commands regex-tool
   :config
   (setq regex-tool-backend 'Perl))
 
-
 ;; -----------------------------------------------------------------------------
 ;; diff, VC, git, github, projects
 ;; -----------------------------------------------------------------------------
-
 
 (use-package ediff
   :ensure nil
@@ -777,7 +747,6 @@
     :defer t)
   (setq magit-process-popup-time 10
         magit-diff-refine-hunk t))
-
 
 ;; show git line status in gutter
 (use-package git-gutter
@@ -820,7 +789,6 @@
 ;; -----------------------------------------------------------------------------
 ;; Major editing modes
 ;; -----------------------------------------------------------------------------
-
 
 ;; some modes use dumb-jump
 (use-package dumb-jump
@@ -977,11 +945,9 @@
   (use-package alchemist)
   (add-hook 'elixir-mode-hook '(lambda () (setq-local helm-dash-docsets '("Elixir" "Erlang")))))
 
-
 ;; -----------------------------------------------------------------------------
 ;; Other...
 ;; -----------------------------------------------------------------------------
-
 
 (use-package fullframe
   :config
@@ -1019,11 +985,9 @@
   (let ((now (current-time)))
     (insert (format-time-string "%A, %B %d, %Y" now))))
 
-
 ;; -----------------------------------------------------------------------------
 ;; private data
 ;; -----------------------------------------------------------------------------
-
 
 ;; I keep my private configs in a separate repo mapped here:
 (defvar user-private-directory
@@ -1039,11 +1003,9 @@
 ;; and also load other packages that depend on it
 (load (private-file "private.el") 'noerror)
 
-
 ;; -----------------------------------------------------------------------------
 ;; server
 ;; -----------------------------------------------------------------------------
-
 
 (use-package server
   :ensure nil
@@ -1051,7 +1013,6 @@
   :config
   (when (and (display-graphic-p) (not (server-running-p)))
     (server-start)))
-
 
 ;; -----------------------------------------------------------------------------
 ;; UI-based customizations
