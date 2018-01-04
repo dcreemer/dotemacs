@@ -38,7 +38,9 @@
 (setq use-package-always-ensure t)
 
 ;; required by the use-package macro
-(require 'diminish)
+(use-package diminish
+  :defer nil)
+
 (require 'bind-key)
 
 ;; add homebrew site-lisp if present
@@ -429,7 +431,7 @@
   (setq save-place-file (state-file "places")))
 
 ;; save and restore minibuffer history
-(use-package savehist-mode
+(use-package savehist
   :ensure nil
   :demand t
   :init
@@ -469,7 +471,7 @@
          ("C-z"      . helm-select-action))
   :diminish helm-mode
   :config
-  (setq helm-locate-command (case system-type
+  (setq helm-locate-command (cl-case system-type
                               ('gnu/linux "locate %s -e -A --regex %s")
                               ('berkeley-unix "locate %s %s")
                               ('windows-nt "es %s %s")
@@ -768,7 +770,7 @@
   (setq projectile-cache-file (state-file "projectile.cache")
         projectile-known-projects-file (state-file "projectile-bookmarks.eld")
         projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
-  (projectile-global-mode)
+  (projectile-mode +1)
   (define-key projectile-mode-map [remap projectile-grep] #'projectile-ag))
 
 (use-package treemacs
@@ -828,6 +830,11 @@
     (nxml-mode)
     (indent-region 0 (count-lines (point-min) (point-max)))))
 
+;; config
+(use-package conf-mode
+  :ensure nil
+  :mode ("\\.conf\\'" "\\.cfg\\'" "config\\.txt\\'"))
+
 ;; JSON
 (use-package json-mode
   :mode "\\.json\\'"
@@ -849,7 +856,7 @@
   :mode "\\.ya?ml\\'")
 
 ;; HTML
-(use-package html-mode
+(use-package web-mode
   :ensure nil
   :defer t
   :mode ("\\.tpl\\'" "\\.htm\\'" "\\.html\\'"))
