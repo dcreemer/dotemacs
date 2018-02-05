@@ -853,7 +853,8 @@
 
 ;; YAML
 (use-package yaml-mode
-  :mode "\\.ya?ml\\'")
+  :mode "\\.ya?ml\\'"
+  :config (setq-default yaml-indent-offset c-basic-offset))
 
 ;; HTML
 (use-package web-mode
