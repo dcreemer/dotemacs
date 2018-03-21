@@ -953,6 +953,15 @@
   (use-package alchemist)
   (add-hook 'elixir-mode-hook '(lambda () (setq-local helm-dash-docsets '("Elixir" "Erlang")))))
 
+(use-package ponylang-mode
+  :mode ("\\.pony\\'" . ponylang-mode)
+  :config
+  (add-hook 'ponylang-mode-hook
+            (lambda ()
+              (setq-local indent-tabs-mode nil)
+              (setq-local tab-width 2)))
+  (use-package flycheck-pony))
+
 ;; -----------------------------------------------------------------------------
 ;; Other...
 ;; -----------------------------------------------------------------------------
