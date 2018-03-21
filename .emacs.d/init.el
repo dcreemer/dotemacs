@@ -129,7 +129,7 @@
 
 ;; set the color theme to something nice
 (use-package color-theme
-  :defer 2
+  :demand t
   :config
   (color-theme-initialize)
   (use-package cyberpunk-theme
@@ -165,11 +165,10 @@
 ;; wrap rather than truncate lines
 (setq-default truncate-lines nil)
 
-;; always show whitespace
+;; always show whitespace in prog-modes
 (use-package whitespace
   :ensure nil
-  :init
-  (add-hook 'prog-mode-hook #'whitespace-mode)
+  :hook (prog-mode . whitespace-mode)
   :diminish whitespace-mode
   :config
   (setq whitespace-line-column 100)
@@ -253,12 +252,6 @@
   :config
   (show-smartparens-global-mode t))
 
-;; FCI off for now
-(use-package fill-column-indicator
-  :disabled t
-  :defer t
-  :config (turn-on-fci-mode))
-
 ;; which-key is great
 (use-package which-key
   :diminish which-key-mode
@@ -269,25 +262,24 @@
 ;; spelling
 (use-package ispell
   :ensure nil
-  :defer 2
+  :defer t
   :config
   (use-package flyspell
     :if (executable-find ispell-program-name)
+    :hook ((text-mode prog-mode) . flyspell-mode)
+    :diminish flyspell-mode
     :config
-    (add-hook 'text-mode-hook #'flyspell-mode)
     ;; only check comments and docs, not strings:
-    (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
-    (add-hook 'prog-mode-hook #'flyspell-prog-mode)
-    (diminish 'flyspell-mode)))
+    (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))))
 
 ;; fullscreen
 (global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
 
 ;; various nice crux commands
 (use-package crux
-  :bind (("C-c n"   . crux-cleanup-buffer-or-region)
-         ("C-a"     . crux-move-beginning-of-line)
-         ("C-c u"   . crux-view-url)
+  :bind (("C-c n" . crux-cleanup-buffer-or-region)
+         ("C-a"   . crux-move-beginning-of-line)
+         ("C-c u" . crux-view-url)
          ("C-x t" . crux-transpose-windows)))
 
 (use-package hydra)
@@ -360,7 +352,7 @@
 ;; buffers should have unique names
 (use-package uniquify
   :ensure nil
-  :defer 2
+  :defer t
   :config
   (setq uniquify-buffer-name-style 'reverse)
   (setq uniquify-separator " • ")
@@ -673,8 +665,7 @@
 (use-package company
   :defer t
   :diminish company-mode
-  :init
-  (add-hook 'prog-mode-hook #'company-mode)
+  :hook (prog-mode . company-mode)
   :config
   ;; bigger popup window
   (setq company-tooltip-limit 20
@@ -684,33 +675,31 @@
         company-echo-delay 0)
   (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
   (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
-  (add-hook 'prog-mode-hook (lambda () (define-key (current-local-map) (kbd "M-SPC") #'company-complete))))
+  (add-hook 'prog-mode-hook
+            (lambda () (define-key (current-local-map) (kbd "M-SPC") #'company-complete))))
 
 ;; highlight-symbols in all programming modes
 (use-package highlight-symbol
   :defer t
   :diminish highlight-symbol-mode
-  :init
-  (add-hook 'prog-mode-hook #'highlight-symbol-mode)
-  (add-hook 'prog-mode-hook #'highlight-symbol-nav-mode))
+  :hook ((prog-mode . highlight-symbol-mode)
+         (prog-mode . highlight-symbol-nav-mode)))
 
 ;; rainbow parens!
 (use-package rainbow-delimiters
   :defer t
-  :init
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
+  :hook (prog-mode . rainbow-delimiters-mode))
 
 ;; show indents guides
 (use-package indent-guide
   :defer t
   :diminish indent-guide-mode
-  :init
-  (add-hook 'prog-mode-hook #'indent-guide-mode))
+  :hook (prog-mode . indent-guide-mode))
 
 ;; Go, Java, etc. like subwords
 (use-package subword
   :ensure nil
-  :defer 2
+  :defer t
   :diminish subword-mode)
 
 ;; Dash to lookup documentation on Mac OS X (though see helm-dash)
@@ -801,16 +790,18 @@
     (define-key (current-local-map) (kbd "M-.") #'dumb-jump-go)
     (define-key (current-local-map) (kbd "M-?") #'dumb-jump-quick-look)
     (define-key (current-local-map) (kbd "M-,") #'dumb-jump-back))
-  (add-hook 'prog-mode-hook #'dc/add-dumb-jump))
+  :hook (prog-mode . dc/add-dumb-jump))
 
 ;; markdown
 (use-package markdown-mode
   :mode ("\\.md\\'" "\\.markdown\\'")
   :config
   (use-package flymd)
-  (add-hook 'markdown-mode-hook #'auto-fill-mode)
-  (add-hook 'markdown-mode-hook #'fci-mode)
-  (add-hook 'markdown-mode-hook '(lambda () (setq-local helm-dash-docsets '("Markdown")))))
+  (use-package fill-column-indicator)
+  (add-hook 'markdown-mode-hook '(lambda ()
+                                   (setq-local helm-dash-docsets '("Markdown"))
+                                   (fci-mode 1)
+                                   (auto-fill-mode 1))))
 
 ;; XML
 (use-package nxml-mode
@@ -845,16 +836,16 @@
 (use-package sql
   :ensure nil
   :defer t
-  :init
-  (add-hook 'sql-mode-hook '(lambda () (setq-local helm-dash-docsets '("MySQL"))))
   :config
+  (add-hook 'sql-mode-hook '(lambda () (setq-local helm-dash-docsets '("MySQL"))))
   (use-package sql-indent)
   (setq-default sql-input-ring-file-name (state-file ".sqli_history")))
 
 ;; YAML
 (use-package yaml-mode
   :mode "\\.ya?ml\\'"
-  :config (setq-default yaml-indent-offset c-basic-offset))
+  :config
+  (setq-default yaml-indent-offset c-basic-offset))
 
 ;; HTML
 (use-package web-mode
@@ -890,8 +881,7 @@
 (use-package elisp-slime-nav
   :defer t
   :diminish elisp-slime-nav-mode
-  :init
-  (add-hook 'emacs-lisp-mode-hook #'elisp-slime-nav-mode))
+  :hook (emacs-lisp-mode . elisp-slime-nav-mode))
 
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook '(lambda () (setq-local helm-dash-docsets '("Emacs Lisp"))))
@@ -899,17 +889,13 @@
 ;; Clojure
 (use-package cider
   :defer t
-  ;; :init
-  ;; (add-to-list 'package-pinned-packages '(cider . "melpa-stable") t)
+  :hook (((cider-mode cider-repl-mode) . eldoc-mode)
+         ((cider-mode cider-repl-mode) . company-mode)
+         (cider-repl-mode . subword-mode)
+         (cider-repl-mode . smartparens-strict-mode)
+         (cider-repl-mode . rainbow-delimiters-mode))
   :config
-  (setq nrepl-log-messages t)
-  (add-hook 'cider-mode-hook #'eldoc-mode)
-  (add-hook 'cider-mode-hook #'company-mode)
-  (add-hook 'cider-repl-mode-hook #'eldoc-mode)
-  (add-hook 'cider-repl-mode-hook #'company-mode)
-  (add-hook 'cider-repl-mode-hook #'subword-mode)
-  (add-hook 'cider-repl-mode-hook #'smartparens-strict-mode)
-  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode))
+  (setq nrepl-log-messages t))
 
 (use-package clojure-mode
   :defer t
@@ -918,10 +904,8 @@
 
 (use-package parinfer
   :ensure t
-  :bind
-  (("C-," . parinfer-toggle-mode))
-  :init
-  (add-hook 'clojure-mode-hook #'parinfer-mode))
+  :bind ("C-," . parinfer-toggle-mode)
+  :hook (clojure-mode . parinfer-mode))
 
 ;; Go
 (use-package go-mode
