@@ -297,6 +297,10 @@
   ("q" nil "quit" :color blue))
 (global-set-key (kbd "C-x C-0") #'hydra-zoom/body)
 
+(use-package direnv
+  :config
+  (setq direnv-show-paths-in-summary nil)
+  (direnv-mode))
 
 ;; -----------------------------------------------------------------------------
 ;; dired
