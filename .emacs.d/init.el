@@ -569,6 +569,7 @@
   (setq org-startup-folded "content")
   (setq org-directory dc/notes-dir)
   (setq org-agenda-files (list dc/notes-dir))
+  (setq org-agenda-include-diary t)
   (setq org-default-notes-file (concat dc/notes-dir "/inbox.org"))
   (setq org-tags-column -85)
   ;; refile:
@@ -581,7 +582,7 @@
   ;; habits:
   (require 'org-habit)
   (setq org-modules '(org-habit))
-  ;(set org-habit-show-habits-only-for-today t)
+  ;; (set org-habit-show-habits-only-for-today t)
   (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0)))
@@ -589,7 +590,27 @@
   (set-face-attribute 'org-document-title nil :foreground "#4c83ff" :height 1.0)
   (set-face-attribute 'org-level-1 nil :foreground "#ff1493" :height 1.0)
   (set-face-attribute 'org-level-2 nil :foreground "#ffff00" :height 1.0)
-  (set-face-attribute 'org-level-3 nil :foreground "#4c83ff" :height 1.0))
+  (set-face-attribute 'org-level-3 nil :foreground "#4c83ff" :height 1.0)
+  (setq org-agenda-custom-commands
+        '(("h" "Home"
+           ((agenda)
+            (todo "" ((org-agenda-files (list org-default-notes-file))
+                      (org-agenda-overriding-header "INBOX")))
+            (tags-todo "-@work+project"
+                       ((org-agenda-overriding-header "PROJECTS")))
+            (tags-todo "-@work-project"
+                       ((org-agenda-overriding-header "TASKS"))))
+           ((org-agenda-tag-filter-preset '("-@work"))))
+          ("w" "Work"
+           ((agenda)
+            (todo "" ((org-agenda-files (list org-default-notes-file))
+                      (org-agenda-overriding-header "INBOX")))
+            (tags-todo "@work+project"
+                       ((org-agenda-overriding-header "PROJECTS")))
+            (tags-todo "@work-project"
+                       ((org-agenda-overriding-header "TASKS"))))
+           ((org-agenda-tag-filter-preset '("-@home"))))
+          )))
 
 ;; epresent for presentations
 (use-package epresent
