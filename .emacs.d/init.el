@@ -563,6 +563,9 @@
          ("C-c a" . org-agenda)
          ("C-c c" . org-capture))
   :config
+  ;; habits:
+  (require 'org-habit)
+  (add-to-list 'org-modules 'org-habit)
   (unbind-key "C-#" org-mode-map) ;; I use this for other things
   (unbind-key "C-_" org-mode-map) ;; don't shadow default undo
   (setq org-startup-indented t)
@@ -570,6 +573,10 @@
   (setq org-directory dc/notes-dir)
   (setq org-agenda-files (list dc/notes-dir))
   (setq org-agenda-include-diary t)
+  (setq org-enforce-todo-dependencies t)
+  (setq org-agenda-dim-blocked-tasks t)
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)")))
   (setq org-default-notes-file (concat dc/notes-dir "/inbox.org"))
   (setq org-tags-column -85)
   ;; refile:
@@ -579,10 +586,6 @@
   (setq org-refile-allow-creating-parent-nodes 'confirm)
   (setq org-outline-path-complete-in-steps nil)
   (setq org-cycle-separator-lines 1)
-  ;; habits:
-  (require 'org-habit)
-  (setq org-modules '(org-habit))
-  ;; (set org-habit-show-habits-only-for-today t)
   (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0)))
