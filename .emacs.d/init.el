@@ -586,7 +586,7 @@
   (setq org-refile-allow-creating-parent-nodes 'confirm)
   (setq org-outline-path-complete-in-steps nil)
   (setq org-cycle-separator-lines 1)
-  (org-babel-do-load-languages 'org-babel-load-languages '((sh . t) (python . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t)))
   (add-hook 'org-mode-hook #'auto-fill-mode)
   (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0)))
   (add-hook 'org-mode-hook #'yas-minor-mode)
