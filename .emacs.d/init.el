@@ -883,6 +883,20 @@
   (use-package sql-indent)
   (setq-default sql-input-ring-file-name (state-file ".sqli_history")))
 
+(use-package mmm-mode
+  :defer nil
+  :config
+  (require 'mmm-auto)
+  (setq mmm-global-mode 'maybe)
+  (mmm-add-classes
+   '((sql-in-python
+      :submode sql-mode
+      :front "^-- begin sql\n"
+      :back "^-- end sql")))
+  (setq mmm-parse-when-idle t)
+  (mmm-add-mode-ext-class 'python-mode "\\.py\\'" 'sql-in-python)
+  (mmm-ify-by-class 'sql-in-python))
+
 ;; YAML
 (use-package yaml-mode
   :mode "\\.ya?ml\\'"
