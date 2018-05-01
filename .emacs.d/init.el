@@ -266,17 +266,14 @@
   (which-key-setup-side-window-right))
 
 ;; spelling
-(use-package ispell
-  :ensure nil
-  :defer t
+(use-package flyspell
+  :init
+  (require 'ispell)
+  :hook ((text-mode prog-mode) . flyspell-mode)
+  :diminish flyspell-mode
   :config
-  (use-package flyspell
-    :if (executable-find ispell-program-name)
-    :hook ((text-mode prog-mode) . flyspell-mode)
-    :diminish flyspell-mode
-    :config
-    ;; only check comments and docs, not strings:
-    (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))))
+  ;; only check comments and docs, not strings:
+  (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face)))
 
 ;; fullscreen
 (global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
