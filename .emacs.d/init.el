@@ -136,6 +136,8 @@
     :config
     (load-theme 'cyberpunk t)))
 
+;; choices I like: adwaita, cyberpunk, flatui, sanityinc-solarized-light
+
 ;; set the font
 ;; Alternative fonts include: DejaVu Sans Mono, and Andale Mono 12
 (when (and (display-graphic-p)
