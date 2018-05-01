@@ -713,9 +713,12 @@
         ;; decrease delay before autocompletion popup shows
         company-idle-delay .2
         ;; remove annoying blinking
-        company-echo-delay 0)
+        company-echo-delay 0
+        ;; align tips
+        company-tooltip-align-annotations t)
   (define-key company-active-map (kbd "C-n") 'company-select-next-or-abort)
   (define-key company-active-map (kbd "C-p") 'company-select-previous-or-abort)
+  (define-key prog-mode-map (kbd "TAB") #'company-indent-or-complete-common)
   (add-hook 'prog-mode-hook
             (lambda () (define-key (current-local-map) (kbd "M-SPC") #'company-complete))))
 
