@@ -309,10 +309,6 @@
   :ensure nil
   :defer t
   :config
-  (use-package dired+
-    :defer t
-    :init
-    (setq diredp-hide-details-initially-flag nil))
   (use-package dired-sort
     :defer t)
   (setq dired-dwim-target t)
