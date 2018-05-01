@@ -1004,6 +1004,25 @@
               (setq-local tab-width 2)))
   (use-package flycheck-pony))
 
+;; Rust
+(use-package rust-mode
+  :mode ("\\.rs\\'" . rust-mode)
+  :config
+  (use-package flycheck-rust
+    :config
+    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+  (use-package cargo
+    :hook (rust-mode . cargo-minor-mode))
+  (defun dc/rustfmt-before-save ()
+    (interactive)
+    (when (eq major-mode 'rust-mode) (rust-format-buffer)))
+  (add-hook 'before-save-hook #'dc/rustfmt-before-save)
+  (use-package racer
+    :config
+    (add-hook 'rust-mode-hook #'racer-mode)
+    (add-hook 'racer-mode-hook #'eldoc-mode)
+    (add-hook 'racer-mode-hook #'company-mode)))
+
 ;; -----------------------------------------------------------------------------
 ;; Other...
 ;; -----------------------------------------------------------------------------
