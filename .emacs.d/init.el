@@ -309,8 +309,6 @@
   :ensure nil
   :defer t
   :config
-  (use-package dired-sort
-    :defer t)
   (setq dired-dwim-target t)
   (setq dired-use-ls-dired nil)
   (setq dired-recursive-deletes 'top))
