@@ -484,8 +484,7 @@
     :bind ("C-c h d" . helm-dash-at-point)
     :config
     (setq helm-dash-browser-func 'w3m ; good enough
-          helm-dash-docsets-path (state-file "docsets")
-          helm-dash-common-docsets '("emacs"))))
+          helm-dash-docsets-path (state-file "docsets"))))
 
 ;; -----------------------------------------------------------------------------
 ;; Dynamic expansion
@@ -1017,6 +1016,7 @@
     (interactive)
     (when (eq major-mode 'rust-mode) (rust-format-buffer)))
   (add-hook 'before-save-hook #'dc/rustfmt-before-save)
+  (add-hook 'rust-mode-hook '(lambda () (setq-local helm-dash-docsets '("Rust"))))
   (use-package racer
     :config
     (add-hook 'rust-mode-hook #'racer-mode)
