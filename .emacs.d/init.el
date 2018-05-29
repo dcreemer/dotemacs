@@ -871,6 +871,7 @@
 (use-package json-mode
   :mode "\\.json\\'"
   :config
+  (add-hook 'json-mode-hook '(lambda () (setq-local js-indent-level 2)))
   (use-package json-navigator))
 
 ;; SQL
