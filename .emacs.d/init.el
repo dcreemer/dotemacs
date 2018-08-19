@@ -330,17 +330,8 @@
 ;; multi-file search
 ;; -----------------------------------------------------------------------------
 
-;; use "silver-searcher" ("ag") instead of grep/ack
-(use-package ag
-  :defer t
-  :init
-  (setq ag-reuse-buffers t)
-  (setq ag-highlight-search t)
-  :config
-  (add-to-list 'ag-arguments "--hidden")
-  (add-hook 'ag-mode-hook
-            (lambda ()
-              (copy-face 'lazy-highlight 'ag-match-face))))
+(use-package deadgrep
+  :defer t)
 
 ;; on a Mac, "mdfind" is better than "locate"
 (when *is-a-mac*
@@ -474,8 +465,6 @@
   (use-package helm-descbinds
     :bind ("C-c h b" . helm-descbinds))
   (use-package helm-projectile) ; C-c p h
-  (use-package helm-ag
-    :bind ("C-c h g" . helm-ag))
   (use-package helm-swoop
     :bind ("C-c h s" . helm-swoop))
   (use-package helm-dash
