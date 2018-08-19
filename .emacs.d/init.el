@@ -796,12 +796,13 @@
   :defer t)
 
 (use-package projectile
+  :bind-keymap ("C-c p" . projectile-command-map)
   :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (setq projectile-cache-file (state-file "projectile.cache")
         projectile-known-projects-file (state-file "projectile-bookmarks.eld")
         projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
-  (projectile-mode +1)
-  (define-key projectile-mode-map [remap projectile-grep] #'projectile-ag))
+  (projectile-mode +1))
 
 (use-package treemacs
   :defer t
