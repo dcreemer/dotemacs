@@ -916,14 +916,8 @@
   :mode "\\.py\\'"
   :config
   (add-hook 'python-mode-hook '(lambda ()
+                                 (flyspell-mode -1)
                                  (setq-local helm-dash-docsets '("Python 2"))))
-  (setq python-shell-interpreter "ipython"
-        python-shell-interpreter-args "-i")
-  (use-package virtualenvwrapper
-    :init
-    (use-package auto-virtualenvwrapper))
-  (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
-  (add-hook 'projectile-after-switch-project-hook #'auto-virtualenvwrapper-activate)
   (use-package company-jedi
     :config
     (add-to-list 'company-backends 'company-jedi)))
