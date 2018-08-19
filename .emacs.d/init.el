@@ -127,26 +127,26 @@
 (setq use-file-dialog nil)
 (setq use-dialog-box nil)
 
-;; set the color theme to something nice
+;; set the color theme to something nice on startup
 (use-package color-theme
-  :demand t
-  :config
+  :init
   (color-theme-initialize)
-  (use-package cyberpunk-theme
-    :config
-    (load-theme 'cyberpunk t)))
+  (use-package cyberpunk-theme)
+  (load-theme 'cyberpunk t))
 
-;; choices I like: adwaita, cyberpunk, flatui, sanityinc-solarized-light
+;; choices I like: adwaita, cyberpunk, flatui, sanityinc-tomorrow-night
 
 ;; set the font
-;; Alternative fonts include: DejaVu Sans Mono, and Andale Mono 12
+(defvar dc/my-font
+  '("Bitstream Vera Sans Mono" . 11)
+  ;; '("Andale Mono" . 12)
+  ;; '("Source Code Pro" . 12)
+  "Pair of font and size to use.")
+
 (when (and (display-graphic-p)
-           (find-font (font-spec :name "Bitstream Vera Sans Mono")))
-           ;; (find-font (font-spec :name "Andale Mono")))
-           ;; (find-font (font-spec :name "Source Code Pro")))
-  (set-frame-font "Bitstream Vera Sans Mono 11" t t))
-  ;; (set-frame-font "Andale Mono 12" t t))
-  ;; (set-frame-font "Source Code Pro 12" t t))
+           (find-font (font-spec :name (car dc/my-font))))
+  (set-frame-font (format "%s %d" (car dc/my-font) (cdr dc/my-font))
+                  t t))
 
 ;; set frame title to full path of file:
 (when (display-graphic-p)
