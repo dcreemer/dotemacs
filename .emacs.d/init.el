@@ -976,9 +976,6 @@
               (setq-local tab-width 4)        ; which are 4 chars...
               (whitespace-mode 0)
               (setq-local helm-dash-docsets '("Go"))))
-  (use-package go-direx
-    :config
-    (define-key go-mode-map (kbd "C-c C-j") 'go-direx-pop-to-buffer))
   (setq gofmt-command "goimports")
   (add-hook 'before-save-hook #'gofmt-before-save))
 
@@ -992,6 +989,7 @@
   (use-package alchemist)
   (add-hook 'elixir-mode-hook '(lambda () (setq-local helm-dash-docsets '("Elixir" "Erlang")))))
 
+;; Pony
 (use-package ponylang-mode
   :mode ("\\.pony\\'" . ponylang-mode)
   :config
