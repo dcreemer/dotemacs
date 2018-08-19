@@ -823,7 +823,7 @@
 ;; Major editing modes
 ;; -----------------------------------------------------------------------------
 
-;; some modes use dumb-jump
+;; most programming modes work well with "dumb-jump"
 (use-package dumb-jump
   :defer t
   :init
@@ -844,6 +844,18 @@
                                    (setq-local helm-dash-docsets '("Markdown"))
                                    (fci-mode 1)
                                    (auto-fill-mode 1))))
+
+;; plantuml
+(use-package plantuml-mode
+  :mode ("\\.plantuml\\'")
+  :config
+  ;; set path to brew-installed jar
+  (setq plantuml-jar-path (substring (shell-command-to-string "brew list plantuml | grep jar")
+                                     0 -1))
+  (use-package flycheck-plantuml
+    :config
+    (flycheck-plantuml-setup)))
+
 
 ;; XML
 (use-package nxml-mode
@@ -883,20 +895,6 @@
   (add-hook 'sql-mode-hook '(lambda () (setq-local helm-dash-docsets '("MySQL"))))
   (use-package sql-indent)
   (setq-default sql-input-ring-file-name (state-file ".sqli_history")))
-
-(use-package mmm-mode
-  :defer nil
-  :config
-  (require 'mmm-auto)
-  (setq mmm-global-mode 'maybe)
-  (mmm-add-classes
-   '((sql-in-python
-      :submode sql-mode
-      :front "^-- begin sql\n"
-      :back "^-- end sql")))
-  (setq mmm-parse-when-idle t)
-  (mmm-add-mode-ext-class 'python-mode "\\.py\\'" 'sql-in-python)
-  (mmm-ify-by-class 'sql-in-python))
 
 ;; YAML
 (use-package yaml-mode
