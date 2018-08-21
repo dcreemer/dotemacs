@@ -620,13 +620,6 @@
 
 (use-package eshell
   :ensure nil)
-  ;; :config
-  ;; (use-package em-smart
-  ;;   :ensure nil
-  ;;   :config
-  ;;   (setq eshell-where-to-jump 'begin
-  ;;         eshell-review-quick-commands nil
-  ;;         eshell-smart-space-goes-to-end t)))
 
 ;; http://paralambda.org/2012/07/02/using-gnu-emacs-as-a-terminal-emulator/
 (use-package multi-term
@@ -793,21 +786,6 @@
         projectile-mode-line '(:eval (format " Proj[%s]" (projectile-project-name))))
   (projectile-mode +1))
 
-(use-package treemacs
-  :defer t
-  :config
-  (setq treemacs-follow-after-init          t
-        treemacs-git-integration            t
-        treemacs-collapse-dirs              3)
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t)
-  (use-package treemacs-projectile
-    :config
-    (setq treemacs-header-function #'treemacs-projectile-create-header)
-    :bind (:map global-map
-                ("C-c p 0" . treemacs-projectile)
-                ("C-c p 9" . treemacs-projectile-toggle))))
-
 ;; -----------------------------------------------------------------------------
 ;; Major editing modes
 ;; -----------------------------------------------------------------------------
@@ -910,10 +888,6 @@
   (use-package company-jedi
     :config
     (add-to-list 'company-backends 'company-jedi)))
-
-(use-package pip-requirements
-  :mode (("\\.pip\\'" . pip-requirements-mode)
-         ("requirements.*\\.txt\\'" . pip-requirements-mode)))
 
 ;; Emacs-lisp
 (use-package elisp-slime-nav
