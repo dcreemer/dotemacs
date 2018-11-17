@@ -894,14 +894,12 @@
   :diminish elisp-slime-nav-mode
   :hook (emacs-lisp-mode . elisp-slime-nav-mode))
 
-(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
 (add-hook 'emacs-lisp-mode-hook '(lambda () (setq-local helm-dash-docsets '("Emacs Lisp"))))
 
 ;; Clojure
 (use-package cider
   :defer t
-  :hook (((cider-mode cider-repl-mode) . eldoc-mode)
-         ((cider-mode cider-repl-mode) . company-mode)
+  :hook (((cider-mode cider-repl-mode) . company-mode)
          (cider-repl-mode . subword-mode)
          (cider-repl-mode . smartparens-strict-mode)
          (cider-repl-mode . rainbow-delimiters-mode))
@@ -972,7 +970,6 @@
   (use-package racer
     :config
     (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'racer-mode-hook #'eldoc-mode)
     (add-hook 'racer-mode-hook #'company-mode)))
 
 ;; -----------------------------------------------------------------------------
