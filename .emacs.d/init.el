@@ -177,7 +177,7 @@
   :hook (prog-mode . whitespace-mode)
   :diminish whitespace-mode
   :config
-  (setq whitespace-line-column 100)
+  (setq whitespace-line-column 80)
   (setq whitespace-style '(face empty lines-tail trailing)))
 
 ;; always show column numbers
@@ -189,8 +189,8 @@
 ;; make the cursor more visible:
 (global-hl-line-mode)
 
-;; fill column is 1/2 full screen w/with two side-by-side windows on my mac:
-(setq-default fill-column 85)
+;; fill column is about 1/2 full screen w/with two side-by-side windows on my mac
+(setq-default fill-column 81)
 
 ;; indent is 4 charactes
 (setq-default c-basic-offset 4)
