@@ -903,6 +903,11 @@
   :config
   (add-hook 'clojure-mode-hook '(lambda () (setq-local helm-dash-docsets '("Clojure")))))
 
+(use-package terraform-mode
+  :mode "\\.tf\\'"
+  :config
+  (use-package company-terraform))
+
 (use-package parinfer
   :ensure t
   :bind ("C-," . parinfer-toggle-mode)
