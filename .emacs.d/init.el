@@ -862,7 +862,9 @@
 (use-package web-mode
   :ensure nil
   :defer t
-  :mode ("\\.tpl\\'" "\\.htm\\'" "\\.html\\'"))
+  :mode ("\\.tpl\\'" "\\.htm\\'" "\\.html\\'")
+  :config
+  (setq web-mode-markup-indent-offset 2))
 
 ;; Java
 ;;(add-hook 'java-mode-hook 'ggtags-mode)
