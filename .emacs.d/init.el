@@ -954,15 +954,12 @@
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode)
   :config
+  (setq rust-format-on-save t)
   (use-package flycheck-rust
     :config
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
   (use-package cargo
     :hook (rust-mode . cargo-minor-mode))
-  (defun dc/rustfmt-before-save ()
-    (interactive)
-    (when (eq major-mode 'rust-mode) (rust-format-buffer)))
-  (add-hook 'before-save-hook #'dc/rustfmt-before-save)
   (add-hook 'rust-mode-hook '(lambda () (setq-local helm-dash-docsets '("Rust"))))
   (use-package racer
     :config
