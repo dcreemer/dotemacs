@@ -138,7 +138,7 @@
 
 ;; set the font
 (defvar dc/my-font
-  '("Bitstream Vera Sans Mono Bold" . 12)
+  '("Bitstream Vera Sans Mono Bold" . 13)
   ;; '("Andale Mono" . 12)
   ;; '("Source Code Pro" . 12)
   "Pair of font and size to use.")
