@@ -285,16 +285,16 @@
          ("C-c u" . crux-view-url)
          ("C-x t" . crux-transpose-windows)))
 
-(use-package hydra)
-
-(defhydra hydra-zoom ()
-  "zoom"
-  ("+" text-scale-increase "in")
-  ("=" text-scale-increase "in")
-  ("-" text-scale-decrease "out")
-  ("0" (text-scale-adjust 0) "reset")
-  ("q" nil "quit" :color blue))
-(global-set-key (kbd "C-x C-0") #'hydra-zoom/body)
+(use-package hydra
+  :config
+  (defhydra hydra-zoom ()
+    "zoom"
+    ("+" text-scale-increase "in")
+    ("=" text-scale-increase "in")
+    ("-" text-scale-decrease "out")
+    ("0" (text-scale-adjust 0) "reset")
+    ("q" nil "quit" :color blue))
+  (global-set-key (kbd "C-x C-0") #'hydra-zoom/body))
 
 (use-package direnv
   :config
@@ -603,16 +603,6 @@
 ;; epresent for presentations
 (use-package epresent
   :commands epresent-run)
-
-(defhydra hydra-org (:color red :columns 3)
-  "Org Mode Movements"
-  ("n" outline-next-visible-heading "next heading")
-  ("p" outline-previous-visible-heading "prev heading")
-  ("N" org-forward-heading-same-level "next heading at same level")
-  ("P" org-backward-heading-same-level "prev heading at same level")
-  ("u" outline-up-heading "up heading")
-  ("g" org-goto "goto" :exit t))
-(global-set-key (kbd "C-c o") #'hydra-org/body)
 
 ;; -----------------------------------------------------------------------------
 ;; terminal configuration
