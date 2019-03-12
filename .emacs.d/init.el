@@ -301,6 +301,11 @@
   (setq direnv-show-paths-in-summary nil)
   (direnv-mode))
 
+(use-package goto-line-preview
+  :defer nil
+  :config
+  (global-set-key [remap goto-line] 'goto-line-preview))
+
 ;; -----------------------------------------------------------------------------
 ;; dired
 ;; -----------------------------------------------------------------------------
