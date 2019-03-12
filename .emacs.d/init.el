@@ -302,9 +302,7 @@
   (direnv-mode))
 
 (use-package goto-line-preview
-  :defer nil
-  :config
-  (global-set-key [remap goto-line] 'goto-line-preview))
+  :bind ("M-g M-g" . #'goto-line-preview))
 
 ;; -----------------------------------------------------------------------------
 ;; dired
