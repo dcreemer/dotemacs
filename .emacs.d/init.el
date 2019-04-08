@@ -128,13 +128,12 @@
 (setq use-dialog-box nil)
 
 ;; set the color theme to something nice on startup
-(use-package color-theme
-  :init
-  (color-theme-initialize)
+(use-package color-theme-modern
+  :config
   (use-package cyberpunk-theme)
-  (load-theme 'cyberpunk t))
-
-;; choices I like: adwaita, cyberpunk, flatui, sanityinc-tomorrow-night
+  (let ((my-theme 'cyberpunk))
+    (load-theme my-theme t t)
+    (enable-theme my-theme)))
 
 ;; set the font
 (defvar dc/my-font
