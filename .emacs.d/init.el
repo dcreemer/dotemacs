@@ -571,7 +571,7 @@
   (setq org-cycle-separator-lines 1)
   (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t)))
   (add-hook 'org-mode-hook #'auto-fill-mode)
-  (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0)))
+  (add-hook 'org-mode-hook '(lambda () (flycheck-mode 0) (turn-off-fci-mode)))
   (add-hook 'org-mode-hook #'yas-minor-mode)
   (set-face-attribute 'org-document-title nil :height 1.0)
   (set-face-attribute 'org-level-1 nil :height 1.0)
@@ -800,8 +800,18 @@
   (use-package fill-column-indicator)
   (add-hook 'markdown-mode-hook '(lambda ()
                                    (setq-local helm-dash-docsets '("Markdown"))
-                                   (fci-mode 1)
+                                   (turn-on-fci-mode)
                                    (auto-fill-mode 1))))
+
+;; asciidoc uses text mode
+(use-package text-mode
+  :ensure nil
+  :mode "\\.adoc\\'"
+  :config
+  (use-package fill-column-indicator)
+  (add-hook 'text-mode-hook '(lambda ()
+                               (turn-on-fci-mode)
+                               (auto-fill-mode 1))))
 
 ;; plantuml
 (use-package plantuml-mode
@@ -813,7 +823,6 @@
   (use-package flycheck-plantuml
     :config
     (flycheck-plantuml-setup)))
-
 
 ;; XML
 (use-package nxml-mode
