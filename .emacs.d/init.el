@@ -864,8 +864,10 @@
   :ensure nil
   :defer t
   :config
-  (add-hook 'sql-mode-hook '(lambda () (setq-local helm-dash-docsets '("MySQL"))))
   (use-package sql-indent)
+  (add-hook 'sql-mode-hook '(lambda ()
+                              (setq-local helm-dash-docsets '("MySQL"))
+                              (sqlind-minor-mode 1)))
   (setq-default sql-input-ring-file-name (state-file ".sqli_history")))
 
 ;; YAML
