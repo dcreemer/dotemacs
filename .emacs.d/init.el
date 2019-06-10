@@ -138,8 +138,10 @@
 ;; set the font
 (defvar dc/my-font
   '("Bitstream Vera Sans Mono Bold" . 13)
+  ;; '("Bitstream Vera Sans Mono" . 12)
   ;; '("Andale Mono" . 12)
   ;; '("Source Code Pro" . 12)
+  ;; '("Inconsolata Awesome" . 13)
   "Pair of font and size to use.")
 
 (when (and (display-graphic-p)
