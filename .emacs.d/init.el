@@ -333,7 +333,8 @@
 ;; -----------------------------------------------------------------------------
 
 (use-package deadgrep
-  :defer t)
+  :defer t
+  :bind ("<f5>" . deadgrep))
 
 ;; on a Mac, "mdfind" is better than "locate"
 (when *is-a-mac*
