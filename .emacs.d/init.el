@@ -799,7 +799,9 @@
 (use-package markdown-mode
   :mode ("\\.md\\'" "\\.markdown\\'")
   :config
-  (use-package flymd)
+  (use-package flymd
+    :config
+    (setq flymd-close-buffer-delete-temp-files t))
   (use-package fill-column-indicator)
   (add-hook 'markdown-mode-hook '(lambda ()
                                    (setq-local helm-dash-docsets '("Markdown"))
