@@ -885,16 +885,16 @@
 ;; Java
 ;;(add-hook 'java-mode-hook 'ggtags-mode)
 
-;; Python
-(use-package python-mode
-  :mode "\\.py\\'"
+;; Python -- using built-in python mode package and Jedi for completion
+(use-package python
+  :ensure nil
   :config
+  (use-package company-jedi)
   (add-hook 'python-mode-hook '(lambda ()
                                  (flyspell-mode -1)
-                                 (setq-local helm-dash-docsets '("Python 2"))))
-  (use-package company-jedi
-    :config
-    (add-to-list 'company-backends 'company-jedi)))
+                                 (jedi:setup)
+                                 (add-to-list 'company-backends 'company-jedi)
+                                 (setq-local helm-dash-docsets '("Python 2")))))
 
 ;; Emacs-lisp
 (use-package elisp-slime-nav
