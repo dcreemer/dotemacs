@@ -909,6 +909,7 @@
 ;; Clojure
 (use-package cider
   :defer t
+  :pin melpa-stable
   :hook (((cider-mode cider-repl-mode) . company-mode)
          (cider-repl-mode . subword-mode)
          (cider-repl-mode . smartparens-strict-mode)
