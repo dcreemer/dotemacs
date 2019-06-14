@@ -135,19 +135,42 @@
     (load-theme my-theme t t)
     (enable-theme my-theme)))
 
-;; set the font
-(defvar dc/my-font
-  '("Bitstream Vera Sans Mono Bold" . 13)
-  ;; '("Bitstream Vera Sans Mono" . 12)
-  ;; '("Andale Mono" . 12)
-  ;; '("Source Code Pro" . 12)
-  ;; '("Inconsolata Awesome" . 13)
-  "Pair of font and size to use.")
+;; Fonts that I like to use
+(defvar dc/my-fonts
+  '(("Bitstream Vera Sans Mono Bold" . 13)
+    ("Bitstream Vera Sans Mono" . 12)
+    ("Andale Mono" . 12)
+    ("Source Code Pro" . 12)
+    ("Inconsolata Awesome Bold" . 13))
+  "Pairs of font and size to use.")
 
-(when (and (display-graphic-p)
-           (find-font (font-spec :name (car dc/my-font))))
-  (set-frame-font (format "%s %d" (car dc/my-font) (cdr dc/my-font))
-                  t t))
+
+(defun dc/cycle (xs)
+  "Given a list XS, return a new list with the first element removed, and tacked on the end."
+  (append (cdr xs) (list (car xs))))
+
+
+(defun dc/set-font (f)
+  "F is a cons of (FONT . SIZE). Set the display to that."
+  (when (find-font (font-spec :name (car f))))
+    (set-frame-font (format "%s %d" (car f) (cdr f)) t t))
+
+
+(defun dc/cycle-font ()
+  "Cycle through my favorite fonts."
+  (interactive)
+  (setq dc/my-fonts (dc/cycle dc/my-fonts))
+  (let ((f (car dc/my-fonts)))
+    (dc/set-font f)
+    (message (format "%s %d" (car f) (cdr f)))))
+
+
+;; when we're on a terminal that support fonts, set my font, and also setup the
+;; ability to easily cycle through my favorites
+(when (display-graphic-p)
+  (dc/set-font (car dc/my-fonts))
+  (bind-key "<f12>" #' dc/cycle-font global-map))
+
 
 ;; set frame title to full path of file:
 (when (display-graphic-p)
