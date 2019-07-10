@@ -847,6 +847,8 @@
   ;; set path to brew-installed jar
   (setq plantuml-jar-path (substring (shell-command-to-string "brew list plantuml | grep jar")
                                      0 -1))
+  (setq-default plantuml-default-exec-mode 'jar)
+  (plantuml-set-exec-mode "jar")
   (use-package flycheck-plantuml
     :config
     (flycheck-plantuml-setup)))
