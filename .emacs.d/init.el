@@ -140,8 +140,7 @@
   '(("Bitstream Vera Sans Mono Bold" . 13)
     ("Bitstream Vera Sans Mono" . 12)
     ("Andale Mono" . 12)
-    ("Source Code Pro" . 12)
-    ("Inconsolata Awesome Bold" . 13))
+    ("Bitstream Vera Sans Mono" . 24))
   "Pairs of font and size to use.")
 
 
