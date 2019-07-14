@@ -360,6 +360,9 @@
   :defer t
   :bind ("<f5>" . deadgrep))
 
+(use-package ripgrep
+  :defer t)
+
 ;; on a Mac, "mdfind" is better than "locate"
 (when *is-a-mac*
   (setq-default locate-command "mdfind"))
