@@ -168,8 +168,11 @@
 ;; ability to easily cycle through my favorites
 (when (display-graphic-p)
   (dc/set-font (car dc/my-fonts))
-  (bind-key "<f12>" #' dc/cycle-font global-map))
+  (bind-key "<f12>" #'dc/cycle-font global-map))
 
+;; on Termux on Android, my crappy keyboard does support C-<space>
+(when (string= (getenv "DIST") "termux")
+  (bind-key "C-\\" #'set-mark-command global-map))
 
 ;; set frame title to full path of file:
 (when (display-graphic-p)
