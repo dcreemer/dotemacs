@@ -12,9 +12,11 @@
 (require 'package)
 
 ;; repositories
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+(setq package-archives
+      '(("gnu"          . "http://elpa.gnu.org/packages/") ; WTF. http because of CERT errors
+        ("org"          . "https://orgmode.org/elpa/")
+        ("melpa"        . "https://melpa.org/packages/")
+        ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
 ;; I use 'use-package' to manage and configure packages
 
