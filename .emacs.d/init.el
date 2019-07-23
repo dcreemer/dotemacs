@@ -112,6 +112,11 @@
   (global-set-key (kbd "s-c") #'clipboard-kill-ring-save)
   (global-set-key (kbd "s-v") #'clipboard-yank))
 
+;; sync clipboards (especial on Android/termux)
+(use-package xclip
+  :config
+  (xclip-mode 1))
+
 ;; turn on menu-, off tool-, and scroll-bars
 (if (display-graphic-p)
     (menu-bar-mode 1)
