@@ -210,7 +210,7 @@
   :hook (prog-mode . whitespace-mode)
   :diminish whitespace-mode
   :config
-  (setq whitespace-line-column 80)
+  (setq whitespace-line-column 100)
   (setq whitespace-style '(face empty lines-tail trailing)))
 
 ;; always show column numbers
