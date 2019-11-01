@@ -944,31 +944,32 @@
 (add-hook 'emacs-lisp-mode-hook '(lambda () (setq-local helm-dash-docsets '("Emacs Lisp"))))
 
 ;; Clojure
-(use-package cider
-  :defer t
-  ;; not for now
-  ;; :pin melpa-stable
-  :hook (((cider-mode cider-repl-mode) . company-mode)
-         (cider-repl-mode . subword-mode)
-         (cider-repl-mode . smartparens-strict-mode)
-         (cider-repl-mode . rainbow-delimiters-mode))
-  :config
-  (setq nrepl-log-messages t))
-
 (use-package clojure-mode
   :defer t
   :config
   (add-hook 'clojure-mode-hook '(lambda () (setq-local helm-dash-docsets '("Clojure")))))
 
-(use-package terraform-mode
-  :mode "\\.tf\\'"
+(use-package cider
+  :defer t
+  :pin melpa-stable
+  :hook (((cider-mode cider-repl-mode) . company-mode)
+         (cider-repl-mode . subword-mode)
+         (cider-repl-mode . smartparens-strict-mode)
+         (cider-repl-mode . rainbow-delimiters-mode))
   :config
-  (use-package company-terraform))
+  (setq cljr-inject-dependencies-at-jack-in nil)
+  (setq nrepl-log-messages t))
 
 (use-package parinfer
   :ensure t
   :bind ("C-," . parinfer-toggle-mode)
   :hook (clojure-mode . parinfer-mode))
+
+;; Terraform
+(use-package terraform-mode
+  :mode "\\.tf\\'"
+  :config
+  (use-package company-terraform))
 
 ;; Go
 (use-package go-mode
