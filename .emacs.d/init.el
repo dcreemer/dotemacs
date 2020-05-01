@@ -97,7 +97,9 @@
 
 ;; auto-save also goes to state directory
 (setq auto-save-list-file-prefix (state-file "auto-save-list/.saves-"))
-
+(setq auto-save-file-name-transforms
+      `(("\\`\\([^/]*/\\)*\\([^/]*\\)\\'" ; match /path/to/file and capture (file)
+         ,(concat (state-file "auto-saves/") "\\2") t)))
 
 ;; -----------------------------------------------------------------------------
 ;; setup text editing and the user interface the way I like it.
