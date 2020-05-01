@@ -779,6 +779,15 @@
   (setq magit-process-popup-time 10
         magit-diff-refine-hunk t))
 
+;; track different git identities in different repos
+(use-package git-identity
+  :after magit
+  :config
+  (git-identity-magit-mode 1)
+  (define-key magit-status-mode-map (kbd "I") 'git-identity-info)
+  :custom
+  (git-identity-verify t))
+
 ;; show git line status in gutter
 (use-package git-gutter
   :bind ("C-x C-g" . git-gutter-mode)
