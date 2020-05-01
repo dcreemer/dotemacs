@@ -498,12 +498,7 @@
     :bind ("C-c h b" . helm-descbinds))
   (use-package helm-projectile) ; C-c p h
   (use-package helm-swoop
-    :bind ("C-c h s" . helm-swoop))
-  (use-package helm-dash
-    :bind ("C-c h d" . helm-dash-at-point)
-    :config
-    (setq helm-dash-browser-func 'w3m ; good enough
-          helm-dash-docsets-path (state-file "docsets"))))
+    :bind ("C-c h s" . helm-swoop)))
 
 ;; -----------------------------------------------------------------------------
 ;; Dynamic expansion
@@ -650,7 +645,7 @@
          ("s-}" . multi-term-next))
   :config
   (setq multi-term-buffer-name "term")
-  (setq multi-term-program "/bin/bash"))
+  (setq multi-term-program "bash"))
 
 (when (require 'term nil t)
   (setq term-bind-key-alist
@@ -700,7 +695,7 @@
   :config
   ;; Override default flycheck triggers
   (setq flycheck-check-syntax-automatically '(save idle-change mode-enabled)
-        flycheck-idle-change-delay 3.0
+        flycheck-idle-change-delay 0.5
         flycheck-display-errors-function #'flycheck-display-error-messages-unless-error-list))
 
 ;; try to do company-based completion everywhere
@@ -712,7 +707,7 @@
   ;; bigger popup window
   (setq company-tooltip-limit 20
         ;; decrease delay before autocompletion popup shows
-        company-idle-delay .2
+        company-idle-delay 0.2
         ;; remove annoying blinking
         company-echo-delay 0
         ;; align tips
@@ -747,12 +742,12 @@
   :defer t
   :diminish subword-mode)
 
-;; Dash to lookup documentation on Mac OS X (though see helm-dash)
+;; Dash to lookup documentation on Mac OS X
 (use-package dash-at-point
   :if *is-mac-gui*
   :bind ("C-c D" . dash-at-point)
   :config
-  (add-to-list 'dash-at-point-mode-alist '(python-mode . "python2,django,gevent")))
+  (add-to-list 'dash-at-point-mode-alist '(python-mode . "python3,gevent")))
 
 ;; playing with regular expressions
 (use-package regex-tool
@@ -804,7 +799,7 @@
   :config
   (setq projectile-cache-file (state-file "projectile.cache")
         projectile-known-projects-file (state-file "projectile-bookmarks.eld")
-        projectile-mode-line-lighter " Proj")
+        projectile-mode-line-prefix " Proj")
   (projectile-mode +1))
 
 ;; -----------------------------------------------------------------------------
@@ -831,33 +826,8 @@
     (setq flymd-close-buffer-delete-temp-files t))
   (use-package fill-column-indicator)
   (add-hook 'markdown-mode-hook '(lambda ()
-                                   (setq-local helm-dash-docsets '("Markdown"))
                                    (turn-on-fci-mode)
                                    (auto-fill-mode 1))))
-
-;; asciidoc uses text mode
-(use-package text-mode
-  :ensure nil
-  :mode "\\.adoc\\'"
-  :config
-  (use-package fill-column-indicator)
-  (add-hook 'text-mode-hook '(lambda ()
-                               (turn-on-fci-mode)
-                               (auto-fill-mode 1))))
-
-;; plantuml
-(use-package plantuml-mode
-  :mode ("\\.plantuml\\'")
-  :config
-  ;; set path to brew-installed jar
-  (setq plantuml-jar-path (substring (shell-command-to-string "brew list plantuml | grep jar")
-                                     0 -1))
-  (setq-default plantuml-default-exec-mode 'jar)
-  (setq plantuml-default-exec-mode 'jar)
-  (plantuml-set-exec-mode "jar")
-  (use-package flycheck-plantuml
-    :config
-    (flycheck-plantuml-setup)))
 
 ;; XML
 (use-package nxml-mode
@@ -896,7 +866,6 @@
   :config
   (use-package sql-indent)
   (add-hook 'sql-mode-hook '(lambda ()
-                              (setq-local helm-dash-docsets '("MySQL"))
                               (sqlind-minor-mode 1)))
   (setq-default sql-input-ring-file-name (state-file ".sqli_history")))
 
