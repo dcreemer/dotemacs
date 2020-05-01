@@ -886,25 +886,42 @@
 
 ;; HTML
 (use-package web-mode
-  :ensure nil
+  :ensure t
   :defer t
   :mode ("\\.tpl\\'" "\\.htm\\'" "\\.html\\'")
   :config
-  (setq web-mode-markup-indent-offset 2))
+  (add-hook 'web-mode-hook '(lambda () (setq web-mode-markup-indent-offset 2))))
 
-;; Java
-;;(add-hook 'java-mode-hook 'ggtags-mode)
+(use-package lsp-mode
+  :ensure t
+  :hook (lsp-mode . lsp-enable-which-key-integration)
+  :commands (lsp lsp-deffered)
+  :config
+  (setq lsp-diagnostic-package :none)) ;; I prefer to have flycheck handle that directly
 
-;; Python -- using built-in python mode package and Jedi for completion
+(use-package lsp-ui
+  :after (lsp-mode)
+  :commands lsp-ui-mode)
+
+(use-package flycheck-pycheckers
+  :ensure t
+  :defer t
+  :after (flycheck)
+  :init
+  (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup)
+  :config
+  (setq flycheck-pycheckers-checkers '(flake8 mypy2 mypy3)))
+
+;; Python -- using built-in python mode package
 (use-package python
   :ensure nil
+  :after (flycheck flycheck-pycheckers)
   :config
-  (use-package company-jedi)
-  (add-hook 'python-mode-hook '(lambda ()
-                                 (flyspell-mode -1)
-                                 (jedi:setup)
-                                 (add-to-list 'company-backends 'company-jedi)
-                                 (setq-local helm-dash-docsets '("Python 2")))))
+  (add-hook 'python-mode-hook 'lsp-deferred))
+
+(use-package python-black
+  :after python
+  :commands python-black-buffer)
 
 ;; Emacs-lisp
 (use-package elisp-slime-nav
@@ -912,13 +929,9 @@
   :diminish elisp-slime-nav-mode
   :hook (emacs-lisp-mode . elisp-slime-nav-mode))
 
-(add-hook 'emacs-lisp-mode-hook '(lambda () (setq-local helm-dash-docsets '("Emacs Lisp"))))
-
 ;; Clojure
 (use-package clojure-mode
-  :defer t
-  :config
-  (add-hook 'clojure-mode-hook '(lambda () (setq-local helm-dash-docsets '("Clojure")))))
+  :defer t)
 
 (use-package cider
   :defer t
@@ -936,12 +949,6 @@
   :bind ("C-," . parinfer-toggle-mode)
   :hook (clojure-mode . parinfer-mode))
 
-;; Terraform
-(use-package terraform-mode
-  :mode "\\.tf\\'"
-  :config
-  (use-package company-terraform))
-
 ;; Go
 (use-package go-mode
   :mode "\\.go\\'"
@@ -954,46 +961,21 @@
             (lambda ()
               (setq-local indent-tabs-mode t) ; gofmt says use tabs...
               (setq-local tab-width 4)        ; which are 4 chars...
-              (whitespace-mode 0)
-              (setq-local helm-dash-docsets '("Go"))))
+              (whitespace-mode 0)))
   (setq gofmt-command "goimports")
   (add-hook 'before-save-hook #'gofmt-before-save))
-
-;; Shell
-(add-hook 'sh-mode-hook '(lambda () (setq-local helm-dash-docsets '("Bash"))))
-
-;; Elixir
-(use-package elixir-mode
-  :mode ("\\.exs\\'" "\\.ex\\'")
-  :config
-  (use-package alchemist)
-  (add-hook 'elixir-mode-hook '(lambda () (setq-local helm-dash-docsets '("Elixir" "Erlang")))))
-
-;; Pony
-(use-package ponylang-mode
-  :mode ("\\.pony\\'" . ponylang-mode)
-  :config
-  (add-hook 'ponylang-mode-hook
-            (lambda ()
-              (setq-local indent-tabs-mode nil)
-              (setq-local tab-width 2)))
-  (use-package flycheck-pony))
 
 ;; Rust
 (use-package rust-mode
   :mode ("\\.rs\\'" . rust-mode)
   :config
   (setq rust-format-on-save t)
+  (add-hook 'rust-mode-hook 'lsp-deferred)
   (use-package flycheck-rust
     :config
     (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
   (use-package cargo
-    :hook (rust-mode . cargo-minor-mode))
-  (add-hook 'rust-mode-hook '(lambda () (setq-local helm-dash-docsets '("Rust"))))
-  (use-package racer
-    :config
-    (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'racer-mode-hook #'company-mode)))
+    :hook (rust-mode . cargo-minor-mode)))
 
 ;; -----------------------------------------------------------------------------
 ;; Other...
