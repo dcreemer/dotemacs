@@ -112,11 +112,6 @@
   (global-set-key (kbd "s-c") #'clipboard-kill-ring-save)
   (global-set-key (kbd "s-v") #'clipboard-yank))
 
-;; sync clipboards (especial on Android/termux)
-(use-package xclip
-  :config
-  (xclip-mode 1))
-
 ;; turn on menu-, off tool-, and scroll-bars
 (if (display-graphic-p)
     (menu-bar-mode 1)
@@ -302,11 +297,8 @@
 (use-package flyspell
   :init
   (require 'ispell)
-  :hook ((text-mode prog-mode) . flyspell-mode)
-  :diminish flyspell-mode
-  :config
-  ;; only check comments and docs, not strings:
-  (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face)))
+  :hook (text-mode . flyspell-mode)
+  :diminish flyspell-mode)
 
 ;; fullscreen
 (global-set-key (kbd "<s-return>") #'toggle-frame-fullscreen)
