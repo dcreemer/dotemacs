@@ -547,23 +547,12 @@
 
 ;; I store my notes here:
 (defvar dc/notes-dir
-  "~/Documents/Notes"
+  "~/Sync/Notes"
   "Directory for soring and finding notes.")
-
-;; deft for managing org notes
-(use-package deft
-  :bind ("C-c d" . deft)
-  :config
-  (setq deft-directory dc/notes-dir)
-  (setq deft-extensions '("org" "txt" "text" "md" "markdown"))
-  (setq deft-use-filename-as-title t)
-  (setq deft-default-extension "org")
-  ;; (setq deft-use-filename-as-title t)
-  ;; (setq deft-use-filter-string-for-filename t)
-  (setq deft-auto-save-interval 5.0))
 
 ;; look up definitions from dictionary
 (use-package dictionary
+  :defer t
   :bind (("C-c f" . dictionary-search)
          ("C-c F" . dictionary-match-words)))
 
