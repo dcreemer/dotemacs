@@ -220,7 +220,7 @@
 (global-hl-line-mode)
 
 ;; fill column is about 1/2 full screen w/with two side-by-side windows on my mac
-(setq-default fill-column 81)
+(setq-default fill-column 88)
 
 ;; indent is 4 charactes
 (setq-default c-basic-offset 4)
