@@ -13,7 +13,7 @@
 
 ;; repositories
 (setq package-archives
-      '(("gnu"          . "http://elpa.gnu.org/packages/") ; WTF. http because of CERT errors
+      '(("gnu"          . "https://elpa.gnu.org/packages/")
         ("org"          . "https://orgmode.org/elpa/")
         ("melpa"        . "https://melpa.org/packages/")
         ("melpa-stable" . "https://stable.melpa.org/packages/")))
