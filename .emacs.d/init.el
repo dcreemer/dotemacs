@@ -979,6 +979,10 @@
   (use-package cargo
     :hook (rust-mode . cargo-minor-mode)))
 
+;; Docker and friends
+(use-package dockerfile-mode
+  :mode ("Dockerfile\\'" . dockerfile-mode))
+
 ;; -----------------------------------------------------------------------------
 ;; Other...
 ;; -----------------------------------------------------------------------------
