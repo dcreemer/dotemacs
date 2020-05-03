@@ -972,6 +972,10 @@
 (use-package dockerfile-mode
   :mode ("Dockerfile\\'" . dockerfile-mode))
 
+(use-package docker
+  :ensure t
+  :bind ("C-c d" . docker))
+
 ;; -----------------------------------------------------------------------------
 ;; Other...
 ;; -----------------------------------------------------------------------------
