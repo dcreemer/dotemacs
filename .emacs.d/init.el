@@ -207,7 +207,7 @@
   :hook (prog-mode . whitespace-mode)
   :diminish whitespace-mode
   :config
-  (setq whitespace-line-column 100)
+  (setq whitespace-line-column 99)
   (setq whitespace-style '(face empty lines-tail trailing)))
 
 ;; always show column numbers
@@ -220,7 +220,7 @@
 (global-hl-line-mode)
 
 ;; fill column is about 1/2 full screen w/with two side-by-side windows on my mac
-(setq-default fill-column 88)
+(setq-default fill-column 99)
 
 ;; indent is 4 charactes
 (setq-default c-basic-offset 4)
@@ -901,7 +901,9 @@
   :init
   (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup)
   :config
-  (setq flycheck-pycheckers-checkers '(flake8 mypy2 mypy3)))
+  (setq flycheck-pycheckers-checkers '(flake8 mypy2 bandit)
+        flycheck-pycheckers-max-line-length 99
+        flycheck-pycheckers-ignore-codes '()))
 
 ;; Python -- using built-in python mode package
 (use-package python
