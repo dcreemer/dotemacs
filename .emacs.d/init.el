@@ -135,15 +135,16 @@
 (use-package color-theme-modern
   :config
   (use-package cyberpunk-theme)
-  (let ((my-theme 'cyberpunk))
+  (use-package vscode-dark-plus-theme)
+  (let ((my-theme 'vscode-dark-plus))
     (load-theme my-theme t t)
     (enable-theme my-theme)))
 
 ;; Fonts that I like to use
 (defvar dc/my-fonts
-  '(("Bitstream Vera Sans Mono Bold" . 13)
+  '(("Menlo" . 13)
+    ("Bitstream Vera Sans Mono Bold" . 13)
     ("Bitstream Vera Sans Mono" . 12)
-    ("Andale Mono" . 12)
     ("Bitstream Vera Sans Mono" . 24))
   "Pairs of font and size to use.")
 
@@ -324,6 +325,7 @@
   (global-set-key (kbd "C-x C-0") #'hydra-zoom/body))
 
 (use-package direnv
+  :ensure t
   :config
   (setq direnv-show-paths-in-summary nil)
   (direnv-mode))
@@ -362,10 +364,8 @@
 
 (use-package deadgrep
   :defer t
+  :ensure t
   :bind ("<f5>" . deadgrep))
-
-(use-package ripgrep
-  :defer t)
 
 ;; on a Mac, "mdfind" is better than "locate"
 (when *is-a-mac*
@@ -498,7 +498,9 @@
   (helm-mode +1)
   (use-package helm-descbinds
     :bind ("C-c h b" . helm-descbinds))
-  (use-package helm-projectile) ; C-c p h
+  (use-package helm-projectile
+    :bind (("C-c p f" . helm-projectile-find-file-dwim)
+           ("C-c p h" . helm-projectile)))
   (use-package helm-swoop
     :bind ("C-c h s" . helm-swoop)))
 
@@ -543,6 +545,7 @@
   (time-add (dc/find-monday) (days-to-time n)))
 
 (defun dc/week-workday (n)
+  "Return a nicely formatted workday string for N days since Monday."
   (format-time-string "%B %d, %Y (%A)" (dc/workday n)))
 
 ;; I store my notes here:
@@ -557,6 +560,7 @@
          ("C-c F" . dictionary-match-words)))
 
 ;; everyone loves org-mode
+;; FIXME: slim this down to what I'm actually using.
 (use-package org
   :bind (("C-c l" . org-store-link)
          ("C-c a" . org-agenda)
@@ -916,6 +920,10 @@
   :after python
   :commands python-black-buffer)
 
+(use-package py-isort
+  :after python
+  :commands py-isort-buffer)
+
 ;; Emacs-lisp
 (use-package elisp-slime-nav
   :defer t
@@ -977,6 +985,13 @@
 (use-package docker
   :ensure t
   :bind ("C-c d" . docker))
+
+;; Lua
+(use-package lua-mode
+  :mode ("\\.lua\\'" . lua-mode))
+
+(use-package fennel-mode
+  :mode ("\\.fnl\\'" . fennel-mode))
 
 ;; -----------------------------------------------------------------------------
 ;; Other...
