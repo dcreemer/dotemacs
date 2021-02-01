@@ -15,8 +15,8 @@
 (setq package-archives
       '(("gnu"          . "https://elpa.gnu.org/packages/")
         ("org"          . "https://orgmode.org/elpa/")
-        ("melpa"        . "https://melpa.org/packages/")
-        ("melpa-stable" . "https://stable.melpa.org/packages/")))
+        ("melpa"        . "https://melpa.org/packages/")))
+        ;; ("melpa-stable" . "https://stable.melpa.org/packages/")))
 
 ;; I use 'use-package' to manage and configure packages
 
@@ -936,7 +936,7 @@
 
 (use-package cider
   :defer t
-  :pin melpa-stable
+  ;; :pin melpa-stable
   :hook (((cider-mode cider-repl-mode) . company-mode)
          (cider-repl-mode . subword-mode)
          (cider-repl-mode . smartparens-strict-mode)
